@@ -36,6 +36,9 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
+    // mySql (local에서 사용)
+    runtimeOnly 'mysql:mysql-connector-java:8.0.26'
+
     // mariaDB
     runtimeOnly 'org.mariadb.jdbc:mariadb-java-client:2.7.2'
 
@@ -53,6 +56,8 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-validation'
 
     // swagger
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0'
+
 
 }
 
