@@ -18,7 +18,6 @@ public class Category {
     @Column(name = "category_id", nullable = false)
     private Integer id;
 
-    @Enumerated(EnumType.STRING)
     @Column(name = "category_name", nullable = false)
     private String category;
 }

@@ -23,6 +23,10 @@ public class ItemService {
         return itemRepository.findAll();
     }
 
+    public List<Item> findByNameContaining(String nameKeyword) {
+        return itemRepository.findItemByNameContaining(nameKeyword);
+    }
+
     public void addItem(ItemAdditionalDto addItem) {
         Category category = categoryRepository.findByCategory(addItem.getCategory()).orElseThrow(()->new RuntimeException("카테고리가 존재하지 않습니다."));
 
