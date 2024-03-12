@@ -4,7 +4,10 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -13,9 +16,11 @@ import java.util.Map;
 import static java.lang.System.getenv;
 
 @Component
+@RequiredArgsConstructor
 public class JwtTokenUtil {
     private Map<String, String> env = getenv();
     private Date now = new Date();
+    private final UserDetailsService userDetailsService;
 
     public String createToken (String email) {
 
@@ -53,8 +58,8 @@ public class JwtTokenUtil {
 
     public Authentication getAuthentication (String token) {
         String email = getUserEmail(token);
-
-
+        UserDetails userDetails = userDetailsService.loadUserByUsername(email);
+        return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
     }
 
     public String getUserEmail (String token) {
