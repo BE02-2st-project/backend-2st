@@ -1,7 +1,6 @@
 package com.github.super_mall.controller.itemController;
 
 import com.github.super_mall.dto.itemDto.ItemAdditionalDto;
-import com.github.super_mall.dto.itemDto.ItemResponseDto;
 import com.github.super_mall.entity.itemEntity.Item;
 import com.github.super_mall.service.itemService.ItemService;
 import lombok.RequiredArgsConstructor;
@@ -24,12 +23,12 @@ public class ItemController {
         return itemService.findAllItem();
     }
 
-    @GetMapping("/search")
+    @GetMapping("/search") // postman X
     public List<Item> findItemsByNameKeyword(@RequestParam("keyword") String keyword) {
         return itemService.findByNameContaining(keyword);
     }
 
-    @PostMapping
+    @PostMapping // postman X
     public ResponseEntity<?> addItem(@RequestBody ItemAdditionalDto addItem) {
         itemService.addItem(addItem);
         return ResponseEntity.ok("상품이 등록되었습니다!");
