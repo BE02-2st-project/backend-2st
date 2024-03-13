@@ -1,17 +1,13 @@
 package com.github.super_mall.dto.itemDto;
 
 import com.github.super_mall.entity.categoryEntity.Category;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
-
-import java.time.LocalDateTime;
+import lombok.NoArgsConstructor;
 
 @Getter
-@Setter
-@Builder
-public class ItemAdditionalDto {
+@NoArgsConstructor
+public class ItemBody {
+
 
     private String userId;
     private Category category;

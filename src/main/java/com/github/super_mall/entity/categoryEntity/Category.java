@@ -1,5 +1,6 @@
 package com.github.super_mall.entity.categoryEntity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,9 +16,9 @@ public class Category {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "category_id", nullable = false)
+    @Column(name = "category_id")
     private Integer id;
 
-    @Column(name = "category_name", nullable = false)
+    @Column(name = "category_name")
     private String category;
 }

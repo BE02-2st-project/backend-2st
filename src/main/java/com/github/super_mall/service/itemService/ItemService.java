@@ -1,6 +1,8 @@
 package com.github.super_mall.service.itemService;
 
 import com.github.super_mall.dto.itemDto.ItemAdditionalDto;
+import com.github.super_mall.dto.itemDto.ItemRegisterDto;
+import com.github.super_mall.dto.itemDto.ItemResponseDto;
 import com.github.super_mall.repository.categoryRepository.CategoryRepository;
 import com.github.super_mall.repository.itemRepository.ItemRepository;
 import org.springframework.stereotype.Service;
@@ -19,7 +21,7 @@ public class ItemService {
         this.categoryRepository = categoryRepository;
     }
 
-    public List<Item> findAllItems() {
+    public List<Item> findAllItem() {
         return itemRepository.findAll();
     }
 
@@ -28,7 +30,8 @@ public class ItemService {
     }
 
     public void addItem(ItemAdditionalDto addItem) {
-        Category category = categoryRepository.findByCategory(addItem.getCategory()).orElseThrow(()->new RuntimeException("카테고리가 존재하지 않습니다."));
+        Category category = categoryRepository.findByCategory(addItem.getCategory())
+                .orElseThrow(() -> new RuntimeException("카테고리가 존재하지 않습니다."));
 
         Item item = Item.toEntity(addItem, category);
         itemRepository.save(item);

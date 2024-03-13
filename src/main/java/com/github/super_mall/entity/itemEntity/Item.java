@@ -1,5 +1,6 @@
 package com.github.super_mall.entity.itemEntity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.github.super_mall.dto.itemDto.ItemAdditionalDto;
 import com.github.super_mall.entity.categoryEntity.Category;
 import jakarta.persistence.*;
@@ -20,29 +21,30 @@ import java.time.format.DateTimeFormatter;
 public class Item {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "item_id", nullable = false)
+    @Column(name = "item_id")
     private Integer id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "category_id", nullable = false)
+    @JoinColumn(name = "category_id")
+    @JsonIgnore
     private Category category;
 
-    @Column(name = "item_name", nullable = false)
+    @Column(name = "item_name")
     private String name;
 
     @Column(name = "img")
     private String imgURL;
 
-    @Column(name = "price", nullable = false)
+    @Column(name = "price")
     private Integer price;
 
-    @Column(name = "stock", nullable = false)
+    @Column(name = "stock")
     private Integer stock;
 
-    @Column(name = "item_description", nullable = false)
+    @Column(name = "item_description")
     private String description;
 
-    @Column(name = "create_at", nullable = false)
+    @Column(name = "create_at")
     private LocalDateTime createAt;
 
     public static Item toEntity(ItemAdditionalDto addItem, Category category) {
@@ -50,9 +52,10 @@ public class Item {
                 .category(category)
                 .name(addItem.getName())
                 .price(addItem.getPrice())
+                .stock(addItem.getStock())
                 .imgURL(addItem.getImgURL())
                 .description(addItem.getDescription())
-                .createAt(LocalDateTime.parse(addItem.getCreateAt(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
+                .createAt(LocalDateTime.now())
                 .build();
     }
 }
