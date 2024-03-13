@@ -23,9 +23,8 @@ public class Item {
     @Column(name = "item_id")
     private Integer id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "category_id")
-    @JsonIgnore
     private Category category;
 
     @Column(name = "item_name")

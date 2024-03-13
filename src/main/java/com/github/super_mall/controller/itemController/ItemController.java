@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.security.Principal;
 
 @RestController
 @RequiredArgsConstructor
@@ -23,16 +24,14 @@ public class ItemController {
         return itemService.findAllItem();
     }
 
-    @GetMapping("/search") // postman X
+    @GetMapping("/search")
     public List<Item> findItemsByNameKeyword(@RequestParam("keyword") String keyword) {
         return itemService.findByNameContaining(keyword);
     }
 
-    @PostMapping // postman X
+    @PostMapping("/addItem")
     public ResponseEntity<?> addItem(@RequestBody ItemAdditionalDto addItem) {
-        itemService.addItem(addItem);
-        return ResponseEntity.ok("상품이 등록되었습니다!");
+        return ResponseEntity.ok().body(itemService.addItem(addItem));
     }
-
 
 }
