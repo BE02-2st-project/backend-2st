@@ -17,7 +17,7 @@ public class OrderItem {
 
     @ManyToOne
     @JoinColumn(name = "item_id")
-    private Item itemId;
+    private Item item;
 
     @ManyToOne
     @JoinColumn(name = "order_id")
@@ -28,7 +28,7 @@ public class OrderItem {
     // 주문할 아이템 생성 메소드
     public static OrderItem createOrderItem(Item item, Integer count){
         OrderItem orderItem = new OrderItem();
-        orderItem.setItemId(item);
+        orderItem.setItem(item);
         orderItem.setCount(count);
 
 //        item.removeStock(count); // 아이템재고에서 count만큼 감소
@@ -37,7 +37,7 @@ public class OrderItem {
 
     // 전체 가격 조회
     public int getTotalPrice() {
-        return getItemId().getPrice() * getCount();
+        return getItem().getPrice() * getCount();
     }
 
     // 주문 취소 시 아이템에 stock 추가

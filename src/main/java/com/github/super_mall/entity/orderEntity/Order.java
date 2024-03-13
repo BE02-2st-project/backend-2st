@@ -25,7 +25,7 @@ public class Order {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private User userId;
+    private User user;
 
     // 주문할 아이템의 리스트를 들고온다.
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
@@ -50,7 +50,7 @@ public class Order {
     // 생성 메소드
     public static Order createOrder(User user, List<OrderItem> orderItemList){
         Order order = new Order();
-        order.setUserId(user);
+        order.setUser(user);
 
         for (OrderItem orderItem : orderItemList){
             order.addOrderItem(orderItem);
@@ -62,15 +62,15 @@ public class Order {
         return order;
     }
 
-//    // 총 가격
-//    public Integer getTotalPrice(){
-//        int totalPrice = 0;
-//        for (OrderItem orderItem : orderItemList){
-//            totalPrice += orderItem.getTotalPrice();
-//        }
-//
-//        return totalPrice;
-//    }
+    // 총 가격
+    public Integer getTotalPrice(){
+        int totalPrice = 0;
+        for (OrderItem orderItem : orderItemList){
+            totalPrice += orderItem.getTotalPrice();
+        }
+
+        return totalPrice;
+    }
 
 //    // 주문 취소
 //    public void orderCancel(){
