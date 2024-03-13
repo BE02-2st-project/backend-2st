@@ -24,7 +24,7 @@ public class ItemController {
         return itemService.findAllItem();
     }
 
-    @GetMapping("/search") // postman X
+    @GetMapping("/search")
     public List<Item> findItemsByNameKeyword(@RequestParam("keyword") String keyword) {
         return itemService.findByNameContaining(keyword);
     }
