@@ -1,12 +1,16 @@
 package com.github.super_mall.entity.userEntity;
 
+import com.github.super_mall.entity.userRoleEntity.UserRole;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor
@@ -14,10 +18,11 @@ import java.time.LocalDateTime;
 @Builder
 @Entity
 @Table(name = "users")
+@EntityListeners(AuditingEntityListener.class)
 public class User {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Column(name = "user_id")
     private Long userId;
     @Column(name = "user_name")
     private String userName;
@@ -31,9 +36,12 @@ public class User {
     private String address;
     @Column(name = "gender")
     private String gender;
-    @Column(name = "create_at")
+
+    @CreatedDate
+    @Column(updatable = false)
     private LocalDateTime createAt;
 
-
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
+    List<UserRole> roles;
 
 }
