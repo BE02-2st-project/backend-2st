@@ -30,8 +30,8 @@ public class ItemController {
     }
 
     @PostMapping("/addItem")
-    public ResponseEntity<?> addItem(@RequestBody ItemAdditionalDto addItem) {
-        return ResponseEntity.ok().body(itemService.addItem(addItem));
+    public ResponseEntity<?> addItem(@RequestBody ItemAdditionalDto addItem, Principal principal) {
+        return ResponseEntity.ok().body(itemService.addItem(addItem, principal.getName()));
     }
 
 }
