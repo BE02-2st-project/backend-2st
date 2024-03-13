@@ -47,8 +47,4 @@ public class AuthController {
         return ResponseEntity.ok(msg);
     }
 
-    @PostMapping("/test")
-    private ResponseEntity<?> test () {
-        return ResponseEntity.ok("성공");
-    }
 }

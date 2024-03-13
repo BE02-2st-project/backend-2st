@@ -36,7 +36,6 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests((authorize) -> authorize
                         .requestMatchers("/api/signup", "/api/login", "/api/refreshToken").permitAll()
                         .requestMatchers("/api/**").hasRole("USER")
-//                        .requestMatchers("/api/**").hasRole("ADMIN")
                 )
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenUtil), UsernamePasswordAuthenticationFilter.class)
                 .logout((logout) -> logout
