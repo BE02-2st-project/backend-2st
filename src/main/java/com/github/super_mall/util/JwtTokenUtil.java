@@ -80,6 +80,4 @@ public class JwtTokenUtil {
                 .getBody()
                 .get("email", String.class);
     }
-
-
 }
