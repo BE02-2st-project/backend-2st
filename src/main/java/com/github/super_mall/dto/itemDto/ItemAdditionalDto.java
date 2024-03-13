@@ -14,10 +14,10 @@ import java.time.LocalDateTime;
 public class ItemAdditionalDto {
 
     private String userId;
-    private Category category;
-    private String imgURL;
+    private String category;
     private String name;
     private Integer price;
     private Integer stock;
+    private String imgURL;
     private String description;
 }
