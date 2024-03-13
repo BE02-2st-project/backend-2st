@@ -21,6 +21,7 @@ import java.util.List;
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "order_Id")
     private Long oderId;
 
     @ManyToOne
@@ -32,16 +33,21 @@ public class Order {
     private List<OrderItem> orderItemList = new ArrayList<>();
 
     // 총 금액
-    private int totalPrice;
+    @Column(name = "total_price")
+    private Integer totalPrice;
 
     // 만약 배송지를 추가한다면 여기?
 
     @DateTimeFormat(pattern = "yyyy-mm-dd hh:mm:ss")
+    @Column(name = "create_at")
     private LocalDateTime createAt;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "status")
     private OrderStatus status;
 
+
+    // OrderItem 생성 메소드
     public void addOrderItem(OrderItem orderItem){
         orderItemList.add(orderItem);
         orderItem.setOrder(this);
@@ -55,7 +61,6 @@ public class Order {
         for (OrderItem orderItem : orderItemList){
             order.addOrderItem(orderItem);
         }
-
         order.setStatus(OrderStatus.ORDER);
         order.setCreateAt(LocalDateTime.now());
 
@@ -64,13 +69,13 @@ public class Order {
 
     // 총 가격
     public Integer getTotalPrice(){
-        int totalPrice = 0;
+        int orderTotalPrice = 0;
         for (OrderItem orderItem : orderItemList){
-            totalPrice += orderItem.getTotalPrice();
+            orderTotalPrice += (orderItem.getPrice() * orderItem.getCount());
         }
-
-        return totalPrice;
+        return orderTotalPrice;
     }
+
 
 //    // 주문 취소
 //    public void orderCancel(){
