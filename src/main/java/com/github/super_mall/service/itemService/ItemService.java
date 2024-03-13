@@ -1,9 +1,11 @@
 package com.github.super_mall.service.itemService;
 
 import com.github.super_mall.dto.itemDto.ItemAdditionalDto;
+import com.github.super_mall.entity.saleEntity.Sale;
 import com.github.super_mall.entity.userEntity.User;
 import com.github.super_mall.repository.categoryRepository.CategoryRepository;
 import com.github.super_mall.repository.itemRepository.ItemRepository;
+import com.github.super_mall.repository.saleRepository.SaleRepository;
 import com.github.super_mall.repository.userRepository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,6 +21,7 @@ public class ItemService {
     private final ItemRepository itemRepository;
     private final CategoryRepository categoryRepository;
     private final UserRepository userRepository;
+    private final SaleRepository saleRepository;
 
     public List<Item> findAllItem() {
         return itemRepository.findAll();
@@ -31,7 +34,8 @@ public class ItemService {
     public Item addItem(ItemAdditionalDto addItem, String email) {
         Category category = categoryRepository.findCategoryByCategory(addItem.getCategory())
                 .orElseThrow(() -> new RuntimeException("카테고리가 존재하지 않습니다."));
-        User user = userRepository.findByEmail(email)
+
+        userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
 
         Item item = Item.toEntity(addItem, category);

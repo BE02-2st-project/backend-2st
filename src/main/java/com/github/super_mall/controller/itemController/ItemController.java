@@ -2,10 +2,12 @@ package com.github.super_mall.controller.itemController;
 
 import com.github.super_mall.dto.itemDto.ItemAdditionalDto;
 import com.github.super_mall.entity.itemEntity.Item;
+import com.github.super_mall.entity.userDetailEntity.CustomUserDetails;
 import com.github.super_mall.service.itemService.ItemService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,8 +32,8 @@ public class ItemController {
     }
 
     @PostMapping("/addItem")
-    public ResponseEntity<?> addItem(@RequestBody ItemAdditionalDto addItem, Principal principal) {
-        return ResponseEntity.ok().body(itemService.addItem(addItem, principal.getName()));
+    public ResponseEntity<?> addItem(@RequestBody ItemAdditionalDto addItem,@AuthenticationPrincipal CustomUserDetails user) {
+        return ResponseEntity.ok().body(itemService.addItem(addItem, user.getEmail()));
     }
 
 }
