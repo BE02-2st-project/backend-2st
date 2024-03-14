@@ -1,8 +1,10 @@
 package com.github.super_mall.controller.orderController;
 
 import com.github.super_mall.dto.orderDto.OrderRequestDto;
+import com.github.super_mall.dto.orderDto.OrderResponseDto;
 import com.github.super_mall.entity.orderEntity.Order;
 import com.github.super_mall.entity.userDetailEntity.CustomUserDetails;
+import com.github.super_mall.entity.userEntity.User;
 import com.github.super_mall.repository.orderRepository.OrderRepository;
 import com.github.super_mall.service.orderService.OrderService;
 import com.github.super_mall.util.JwtTokenUtil;
@@ -60,4 +62,11 @@ public class OrderController {
 //        return new ResponseEntity<>(orderId, HttpStatus.OK);
         return ResponseEntity.ok("주문이 완료되었습니다.");
     }
+
+    @GetMapping("/orders")
+    public List<OrderResponseDto> findAllOrder(@AuthenticationPrincipal CustomUserDetails customUserDetails){
+        String email = customUserDetails.getEmail();
+        return orderService.findAllOrder(email);
+    }
+
 }
