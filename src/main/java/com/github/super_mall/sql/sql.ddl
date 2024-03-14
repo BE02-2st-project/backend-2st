@@ -38,9 +38,17 @@ CREATE TABLE `baskets` (
 CREATE TABLE `orders` (
                           `order_id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
                           `user_id` INT NOT NULL,
-                          `item_id`INT NOT NULL,
-                          `count`INT NOT NULL,
+                          `total_price` INT NOT NULL,
+                          `status` VARCHAR(20),
                           `create_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE `order_item` (
+                              `order_item_id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                              `order_id` INT NOT NULL,
+                              `item_id` INT NOT NULL,
+                              `price` INT NOT NULL,
+                              `count` INT NOT NULL
 );
 
 CREATE TABLE `sales` (

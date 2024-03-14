@@ -23,21 +23,20 @@ public class OrderItem {
     @JoinColumn(name = "order_id")
     private Order order;
 
+    @Column(name = "price")
+    private Integer price;
+
+    @Column(name = "count")
     private Integer count;
 
     // 주문할 아이템 생성 메소드
-    public static OrderItem createOrderItem(Item item, Integer count){
+    public static OrderItem createOrderItem(Item item, Integer price, Integer count){
         OrderItem orderItem = new OrderItem();
         orderItem.setItem(item);
+        orderItem.setPrice(price);
         orderItem.setCount(count);
-
 //        item.removeStock(count); // 아이템재고에서 count만큼 감소
         return orderItem;
-    }
-
-    // 전체 가격 조회
-    public int getTotalPrice() {
-        return getItem().getPrice() * getCount();
     }
 
     // 주문 취소 시 아이템에 stock 추가
