@@ -28,7 +28,6 @@ public class OrderService {
     private final UserRepository userRepository;
     private final OrderRepository orderRepository;
 
-
     // 주문 생성
     public Long createOrder(Integer itemId , OrderRequestDto orderDto, String email) {
         Item item = itemRepository.findById(itemId)
@@ -50,6 +49,7 @@ public class OrderService {
         return order.getOderId();
     }
 
+    // 주문 조회
     public List<OrderResponseDto> findAllOrder(String email) {
         List<Order> orderList = orderRepository.findOrders(email);
 
@@ -68,4 +68,10 @@ public class OrderService {
 
        return orderResponseDtoList;
     }
+
+    // 주문 취소
+//    public void deleteOrder(Long orderId, String email) {
+//        Order order = orderRepository.findById(orderId).orElseThrow(EntityNotFoundException::new);
+//        order.deleteOrder();
+//    }
 }
