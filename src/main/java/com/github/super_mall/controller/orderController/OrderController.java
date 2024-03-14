@@ -57,6 +57,7 @@ public class OrderController {
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
 
-        return new ResponseEntity<>(orderId, HttpStatus.OK);
+//        return new ResponseEntity<>(orderId, HttpStatus.OK);
+        return ResponseEntity.ok("주문이 완료되었습니다.");
     }
 }
