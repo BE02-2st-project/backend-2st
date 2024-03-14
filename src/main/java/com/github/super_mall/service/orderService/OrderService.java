@@ -70,8 +70,8 @@ public class OrderService {
     }
 
     // 주문 취소
-//    public void deleteOrder(Long orderId, String email) {
-//        Order order = orderRepository.findById(orderId).orElseThrow(EntityNotFoundException::new);
-//        order.deleteOrder();
-//    }
+    public void deleteOrder(Long orderId, String email) {
+        Order order = orderRepository.findById(orderId).orElseThrow(EntityNotFoundException::new);
+        order.deleteOrder();
+    }
 }

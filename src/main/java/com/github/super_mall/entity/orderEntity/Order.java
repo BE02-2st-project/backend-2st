@@ -77,10 +77,10 @@ public class Order {
     }
 
     // 주문 취소 메소드
-//    public void deleteOrder() {
-//        this.setStatus(OrderStatus.CANCEL);
-//        for(OrderItem orderItem : orderItemList){
-//            orderItem.cancel();
-//        }
-//    }
+    public void deleteOrder() {
+        this.status = OrderStatus.CANCEL;
+        for(OrderItem orderItem : orderItemList){
+            orderItem.cancel();
+        }
+    }
 }

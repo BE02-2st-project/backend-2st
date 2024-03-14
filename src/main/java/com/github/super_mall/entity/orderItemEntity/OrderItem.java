@@ -35,12 +35,12 @@ public class OrderItem {
         orderItem.setItem(item);
         orderItem.setPrice(price);
         orderItem.setCount(count);
-//        item.removeStock(count); // 아이템재고에서 count만큼 감소
+        item.removeStock(count); // 아이템재고에서 count만큼 감소
         return orderItem;
     }
 
     // 주문 취소 시 아이템에 stock 추가
-//    public void cancel(){
-//        getItem().addStock(count);
-//    }
+    public void cancel(){
+        this.getItem().addStock(count);
+    }
 }

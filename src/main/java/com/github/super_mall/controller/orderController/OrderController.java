@@ -72,12 +72,12 @@ public class OrderController {
     }
 
     // 주문 취소
-//    @DeleteMapping("/order/{orderId}")
-//    public ResponseEntity<?> deleteOrder(@PathVariable Long orderId, @AuthenticationPrincipal CustomUserDetails customUserDetails){
-//        String email = customUserDetails.getEmail();
-//        orderService.deleteOrder(orderId, email);
-//
-//        return ResponseEntity.ok("주문이 취소되었습니다.");
-//    }
+    @DeleteMapping("/order/{orderId}")
+    public ResponseEntity<?> deleteOrder(@PathVariable Long orderId, @AuthenticationPrincipal CustomUserDetails customUserDetails){
+        String email = customUserDetails.getEmail();
+        orderService.deleteOrder(orderId, email);
+
+        return ResponseEntity.ok("주문이 취소되었습니다.");
+    }
 
 }
