@@ -2,13 +2,16 @@ package com.github.super_mall.controller.itemController;
 
 import com.github.super_mall.dto.itemDto.ItemAdditionalDto;
 import com.github.super_mall.entity.itemEntity.Item;
+import com.github.super_mall.entity.userDetailEntity.CustomUserDetails;
 import com.github.super_mall.service.itemService.ItemService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.security.Principal;
 
 @RestController
 @RequiredArgsConstructor
@@ -23,15 +26,15 @@ public class ItemController {
         return itemService.findAllItem();
     }
 
-    @GetMapping("/search") // postman X
+    @GetMapping("/search")
     public List<Item> findItemsByNameKeyword(@RequestParam("keyword") String keyword) {
         return itemService.findByNameContaining(keyword);
     }
 
-    @PostMapping // postman X
-    public ResponseEntity<?> addItem(@RequestBody ItemAdditionalDto addItem) {
-        itemService.addItem(addItem);
-        return ResponseEntity.ok("상품이 등록되었습니다!");
+    @PostMapping("/addItem")
+    public ResponseEntity<?> addItem(@RequestBody ItemAdditionalDto addItem,@AuthenticationPrincipal CustomUserDetails user) {
+        itemService.addItem(addItem, user.getEmail());
+        return ResponseEntity.ok("상품이 등록되었습니다.");
     }
 
 

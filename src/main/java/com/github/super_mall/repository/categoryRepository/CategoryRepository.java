@@ -10,5 +10,5 @@ import java.util.Optional;
 @Repository
 public interface CategoryRepository extends JpaRepository<Category, Integer> {
 
-    Optional<Category> findByCategory(Category category);
+    Optional<Category> findCategoryByCategory(String category);
 }

@@ -1,25 +1,27 @@
 package com.github.super_mall.service.itemService;
 
 import com.github.super_mall.dto.itemDto.ItemAdditionalDto;
-import com.github.super_mall.dto.itemDto.ItemRegisterDto;
-import com.github.super_mall.dto.itemDto.ItemResponseDto;
+import com.github.super_mall.entity.saleEntity.Sale;
+import com.github.super_mall.entity.userEntity.User;
 import com.github.super_mall.repository.categoryRepository.CategoryRepository;
 import com.github.super_mall.repository.itemRepository.ItemRepository;
+import com.github.super_mall.repository.saleRepository.SaleRepository;
+import com.github.super_mall.repository.userRepository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import com.github.super_mall.entity.itemEntity.Item;
 import com.github.super_mall.entity.categoryEntity.Category;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class ItemService {
     private final ItemRepository itemRepository;
     private final CategoryRepository categoryRepository;
-
-    public ItemService(ItemRepository itemRepository, CategoryRepository categoryRepository) {
-        this.itemRepository = itemRepository;
-        this.categoryRepository = categoryRepository;
-    }
+    private final UserRepository userRepository;
+    private final SaleRepository saleRepository;
 
     public List<Item> findAllItem() {
         return itemRepository.findAll();
@@ -29,11 +31,16 @@ public class ItemService {
         return itemRepository.findItemByNameContaining(nameKeyword);
     }
 
-    public void addItem(ItemAdditionalDto addItem) {
-        Category category = categoryRepository.findByCategory(addItem.getCategory())
+    public void addItem(ItemAdditionalDto addItem, String email) {
+        Category category = categoryRepository.findCategoryByCategory(addItem.getCategory())
                 .orElseThrow(() -> new RuntimeException("카테고리가 존재하지 않습니다."));
 
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
+
         Item item = Item.toEntity(addItem, category);
+        Sale sale = Sale.toEntity(item, user);
         itemRepository.save(item);
+        saleRepository.save(sale);
     }
 }

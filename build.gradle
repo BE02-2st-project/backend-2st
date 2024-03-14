@@ -34,7 +34,12 @@ dependencies {
     // lombok
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
+
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+    //test
+    testCompileOnly 'org.projectlombok:lombok'
+    testAnnotationProcessor 'org.projectlombok:lombok'
 
     // mySql (local에서 사용)
     runtimeOnly 'mysql:mysql-connector-java:8.0.26'
