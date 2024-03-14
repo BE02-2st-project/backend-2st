@@ -33,7 +33,9 @@ public class ItemController {
 
     @PostMapping("/addItem")
     public ResponseEntity<?> addItem(@RequestBody ItemAdditionalDto addItem,@AuthenticationPrincipal CustomUserDetails user) {
-        return ResponseEntity.ok().body(itemService.addItem(addItem, user.getEmail()));
+        itemService.addItem(addItem, user.getEmail());
+        return ResponseEntity.ok("상품이 등록되었습니다.");
     }
+
 
 }

@@ -31,14 +31,16 @@ public class ItemService {
         return itemRepository.findItemByNameContaining(nameKeyword);
     }
 
-    public Item addItem(ItemAdditionalDto addItem, String email) {
+    public void addItem(ItemAdditionalDto addItem, String email) {
         Category category = categoryRepository.findCategoryByCategory(addItem.getCategory())
                 .orElseThrow(() -> new RuntimeException("카테고리가 존재하지 않습니다."));
 
-        userRepository.findByEmail(email)
+        User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
 
         Item item = Item.toEntity(addItem, category);
-        return itemRepository.save(item);
+        Sale sale = Sale.toEntity(item, user);
+        itemRepository.save(item);
+        saleRepository.save(sale);
     }
 }

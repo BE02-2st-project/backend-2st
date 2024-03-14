@@ -18,21 +18,6 @@ import java.security.Principal;
 @SpringBootTest
 class SuperMallApplicationTests {
 
-    @Mock
-    private ItemService itemService;
-
-    @InjectMocks
-    private ItemController itemController;
-
-    @BeforeEach
-    public void setUp() {
-        MockitoAnnotations.openMocks(this);
-    }
-
-    SuperMallApplicationTests(ItemService itemService) {
-        this.itemService = itemService;
-    }
-
     @Test
     void contextLoads() {
     }
