@@ -56,4 +56,12 @@ public class Item {
                 .createAt(LocalDateTime.now())
                 .build();
     }
+
+    public void removeStock(Integer count) {
+        stock = stock - count;
+    }
+
+    public void addStock(Integer count) {
+        stock = stock + count;
+    }
 }

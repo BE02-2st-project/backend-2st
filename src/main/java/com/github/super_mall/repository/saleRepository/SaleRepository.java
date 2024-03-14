@@ -10,5 +10,5 @@ import java.util.Optional;
 @Repository
 public interface SaleRepository extends JpaRepository<Sale, Integer> {
 
-    Optional<List<Sale>> findSaleByUser_UserId(Long user_userId);
+    List<Sale> findSaleByUser_UserId(Long user_userId);
 }
