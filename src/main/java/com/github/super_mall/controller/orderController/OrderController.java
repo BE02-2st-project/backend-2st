@@ -1,8 +1,10 @@
 package com.github.super_mall.controller.orderController;
 
 import com.github.super_mall.dto.orderDto.OrderRequestDto;
+import com.github.super_mall.dto.orderDto.OrderResponseDto;
 import com.github.super_mall.entity.orderEntity.Order;
 import com.github.super_mall.entity.userDetailEntity.CustomUserDetails;
+import com.github.super_mall.entity.userEntity.User;
 import com.github.super_mall.repository.orderRepository.OrderRepository;
 import com.github.super_mall.service.orderService.OrderService;
 import com.github.super_mall.util.JwtTokenUtil;
@@ -28,6 +30,7 @@ public class OrderController {
     private final JwtTokenUtil jwtTokenUtil;
     private final OrderRepository orderRepository;
 
+    // 주문 생성
     @PostMapping("/{itemId}/order")
     public ResponseEntity<?> createOrder(
                 @PathVariable Integer itemId,
@@ -60,4 +63,21 @@ public class OrderController {
 //        return new ResponseEntity<>(orderId, HttpStatus.OK);
         return ResponseEntity.ok("주문이 완료되었습니다.");
     }
+
+    // 주문 조회
+    @GetMapping("/orders")
+    public List<OrderResponseDto> findAllOrder(@AuthenticationPrincipal CustomUserDetails customUserDetails){
+        String email = customUserDetails.getEmail();
+        return orderService.findAllOrder(email);
+    }
+
+    // 주문 취소
+//    @DeleteMapping("/order/{orderId}")
+//    public ResponseEntity<?> deleteOrder(@PathVariable Long orderId, @AuthenticationPrincipal CustomUserDetails customUserDetails){
+//        String email = customUserDetails.getEmail();
+//        orderService.deleteOrder(orderId, email);
+//
+//        return ResponseEntity.ok("주문이 취소되었습니다.");
+//    }
+
 }

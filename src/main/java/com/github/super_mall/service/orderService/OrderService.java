@@ -1,6 +1,8 @@
 package com.github.super_mall.service.orderService;
 
+import com.github.super_mall.dto.orderDto.OrderItemResponseDto;
 import com.github.super_mall.dto.orderDto.OrderRequestDto;
+import com.github.super_mall.dto.orderDto.OrderResponseDto;
 import com.github.super_mall.entity.itemEntity.Item;
 import com.github.super_mall.entity.orderEntity.Order;
 import com.github.super_mall.entity.orderItemEntity.OrderItem;
@@ -26,7 +28,6 @@ public class OrderService {
     private final UserRepository userRepository;
     private final OrderRepository orderRepository;
 
-
     // 주문 생성
     public Long createOrder(Integer itemId , OrderRequestDto orderDto, String email) {
         Item item = itemRepository.findById(itemId)
@@ -47,4 +48,30 @@ public class OrderService {
 
         return order.getOderId();
     }
+
+    // 주문 조회
+    public List<OrderResponseDto> findAllOrder(String email) {
+        List<Order> orderList = orderRepository.findOrders(email);
+
+        List<OrderResponseDto> orderResponseDtoList = new ArrayList<>();
+
+        for(Order order : orderList){
+            OrderResponseDto orderResponseDto = new OrderResponseDto(order);
+            List<OrderItem> orderItemList = order.getOrderItemList();
+            for(OrderItem orderItem : orderItemList){
+                OrderItemResponseDto orderItemResponseDto = new OrderItemResponseDto(orderItem);
+                orderResponseDto.addOrderItemDto(orderItemResponseDto);
+            }
+
+            orderResponseDtoList.add(orderResponseDto);
+        }
+
+       return orderResponseDtoList;
+    }
+
+    // 주문 취소
+//    public void deleteOrder(Long orderId, String email) {
+//        Order order = orderRepository.findById(orderId).orElseThrow(EntityNotFoundException::new);
+//        order.deleteOrder();
+//    }
 }

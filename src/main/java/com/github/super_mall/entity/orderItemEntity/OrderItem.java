@@ -41,6 +41,6 @@ public class OrderItem {
 
     // 주문 취소 시 아이템에 stock 추가
 //    public void cancel(){
-//        getItemId().addStock(count);
+//        getItem().addStock(count);
 //    }
 }

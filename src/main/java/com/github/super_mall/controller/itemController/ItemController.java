@@ -36,6 +36,4 @@ public class ItemController {
         itemService.addItem(addItem, user.getEmail());
         return ResponseEntity.ok("상품이 등록되었습니다.");
     }
-
-
 }
