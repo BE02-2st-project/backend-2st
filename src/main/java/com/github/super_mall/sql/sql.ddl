@@ -57,7 +57,7 @@ CREATE TABLE `sales` (
                          `sale_id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
                          `user_id` INT NOT NULL,
                          `item_id` INT NOT NULL,
-                         `stack` INT NOT NULL,
+                         `stock` INT NOT NULL,
                          `create_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
