@@ -34,7 +34,7 @@ public class SecurityConfiguration {
                 .formLogin(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests((authorize) -> authorize
-                        .requestMatchers("/api/signup", "/api/login", "/api/refreshToken").permitAll()
+                        .requestMatchers("/api/signup", "/api/login", "/api/refreshToken", "/api-docs", "/swagger-ui/index.html").permitAll()
                         .requestMatchers("/api/**").hasRole("USER")
                 )
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenUtil), UsernamePasswordAuthenticationFilter.class)

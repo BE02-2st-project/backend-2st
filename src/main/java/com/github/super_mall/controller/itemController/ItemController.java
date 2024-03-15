@@ -4,6 +4,7 @@ import com.github.super_mall.dto.itemDto.ItemAdditionalDto;
 import com.github.super_mall.entity.itemEntity.Item;
 import com.github.super_mall.entity.userDetailEntity.CustomUserDetails;
 import com.github.super_mall.service.itemService.ItemService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.security.Principal;
 
+@Tag(name = "Example", description = "Example API")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/items")
