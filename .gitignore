@@ -38,5 +38,5 @@ out/
 
 ### application ###
 /src/main/resources/application-dev.yaml
-/src/main/resources/application-prod.yaml.yaml
-
+/src/main/resources/application-prod.yaml
+/src/main/resources/application-auth.yaml
