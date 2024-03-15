@@ -36,6 +36,10 @@ public class User {
     private String address;
     @Column(name = "gender")
     private String gender;
+    @Column(name = "social_name")
+    private String socialName;
+    @Column(name = "social_user_id")
+    private String socialUserId;
 
     @CreatedDate
     @Column(updatable = false)
@@ -44,4 +48,20 @@ public class User {
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
     List<UserRole> roles;
 
+    public User (String socialUserId, String socialName, String email, String userName) {
+        this.socialUserId = socialUserId;
+        this.password = "12341234!";
+        this.email = email;
+        this.socialName = socialName;
+        this.userName = userName;
+    }
+
+    public User update(String socialUserId, String socialName, String email, String userName) {
+        this.socialUserId = socialUserId;
+        this.password = "12341234!";
+        this.email = email;
+        this.socialName = socialName;
+        this.userName = userName;
+        return this;
+    }
 }
