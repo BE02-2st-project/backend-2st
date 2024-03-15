@@ -1,7 +1,6 @@
 package com.github.super_mall.entity.itemEntity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.github.super_mall.dto.itemDto.ItemAdditionalDto;
+import com.github.super_mall.dto.itemDto.ItemRegisterDto;
 import com.github.super_mall.entity.categoryEntity.Category;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -45,7 +44,7 @@ public class Item {
     @Column(name = "create_at")
     private LocalDateTime createAt;
 
-    public static Item toEntity(ItemAdditionalDto addItem, Category category) {
+    public static Item toEntity(ItemRegisterDto addItem, Category category) {
         return Item.builder()
                 .category(category)
                 .name(addItem.getName())

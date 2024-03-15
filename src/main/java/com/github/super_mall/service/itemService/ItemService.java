@@ -1,19 +1,19 @@
 package com.github.super_mall.service.itemService;
 
-import com.github.super_mall.dto.itemDto.ItemAdditionalDto;
+import com.github.super_mall.dto.itemDto.ItemRegisterDto;
 import com.github.super_mall.entity.saleEntity.Sale;
 import com.github.super_mall.entity.userEntity.User;
 import com.github.super_mall.repository.categoryRepository.CategoryRepository;
 import com.github.super_mall.repository.itemRepository.ItemRepository;
 import com.github.super_mall.repository.saleRepository.SaleRepository;
 import com.github.super_mall.repository.userRepository.UserRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import com.github.super_mall.entity.itemEntity.Item;
 import com.github.super_mall.entity.categoryEntity.Category;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -31,7 +31,8 @@ public class ItemService {
         return itemRepository.findItemByNameContaining(nameKeyword);
     }
 
-    public void addItem(ItemAdditionalDto addItem, String email) {
+    @Transactional
+    public void addItem(ItemRegisterDto addItem, String email) {
         Category category = categoryRepository.findCategoryByCategory(addItem.getCategory())
                 .orElseThrow(() -> new RuntimeException("카테고리가 존재하지 않습니다."));
 
@@ -42,5 +43,30 @@ public class ItemService {
         Sale sale = Sale.toEntity(item, user);
         itemRepository.save(item);
         saleRepository.save(sale);
+    }
+
+    @Transactional
+    public void updateProduct(ItemRegisterDto itemRegisterDto) {
+        Category category = categoryRepository.findCategoryByCategory(itemRegisterDto.getCategory())
+                .orElseThrow(() -> new RuntimeException("카테고리가 존재하지 않습니다."));
+
+        Item updateItem = Item.builder()
+                .id(itemRegisterDto.getItemId())
+                .category(category)
+                .name(itemRegisterDto.getName())
+                .stock(itemRegisterDto.getStock())
+                .price(itemRegisterDto.getPrice())
+                .description(itemRegisterDto.getDescription())
+                .build();
+
+        itemRepository.save(updateItem);
+
+    }
+
+    @Transactional
+    public void deleteProduct(Integer itemId) {
+        Item itemEntity = itemRepository.findById(itemId)
+                .orElseThrow(() -> new RuntimeException("존재하지 않는 상품입니다."));
+//        itemEntity.setIsDelete(true);
     }
 }

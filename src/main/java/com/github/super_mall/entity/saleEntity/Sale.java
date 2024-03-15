@@ -1,7 +1,6 @@
 package com.github.super_mall.entity.saleEntity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.github.super_mall.dto.itemDto.ItemAdditionalDto;
 import com.github.super_mall.entity.itemEntity.Item;
 import com.github.super_mall.entity.userEntity.User;
 import jakarta.persistence.*;
