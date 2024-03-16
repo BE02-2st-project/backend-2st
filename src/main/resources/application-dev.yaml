@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:mariadb://database-2.cxkkamogkg22.ap-northeast-2.rds.amazonaws.com:3306/super_mall_db_dev?useUnicode=true&characterEncoding=UTF-8&allowPublicKeyRetrieval=true&useSSL=false
+    url: jdbc:mariadb://database-1.cxkkamogkg22.ap-northeast-2.rds.amazonaws.com:3306/super_mall_db_dev?useUnicode=true&characterEncoding=UTF-8&allowPublicKeyRetrieval=true&useSSL=false
     username: ${LOCAL_USERNAME}
     password: ${LOCAL_PASSWORD_DEV}
     driver-class-name: org.mariadb.jdbc.Driver
