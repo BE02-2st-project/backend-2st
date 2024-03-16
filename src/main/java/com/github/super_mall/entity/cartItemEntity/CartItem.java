@@ -28,15 +28,21 @@ public class CartItem {
     @JoinColumn(name = "item_id")
     private Item item;
 
+    @Column(name = "price")
+    private Integer price;
+
+    @Column(name = "count")
     private Integer count;
 
     @DateTimeFormat(pattern = "yyyy-mm-dd")
     private LocalDateTime createAt;
 
-    public static CartItem createCartItem(Cart cart, Item item, Integer count){
+    // 장바구니에 상품 등록 메소드
+    public static CartItem createCartItem(Cart cart, Item item, Integer price, Integer count){
         CartItem cartItem = new CartItem();
         cartItem.setCart(cart);
         cartItem.setItem(item);
+        cartItem.setPrice(price);
         cartItem.setCount(count);
         cartItem.setCreateAt(LocalDateTime.now());
 
@@ -47,5 +53,4 @@ public class CartItem {
     public void addCount(Integer count){
         this.count += count;
     }
-
 }

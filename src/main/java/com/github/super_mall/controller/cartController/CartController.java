@@ -1,8 +1,13 @@
 package com.github.super_mall.controller.cartController;
 
 import com.github.super_mall.dto.cartDto.CartItemRequestDto;
+import com.github.super_mall.dto.cartDto.CartListResponseDto;
 import com.github.super_mall.dto.cartDto.CartResponseDto;
+import com.github.super_mall.dto.cartOrderDto.CartOrderDto;
+import com.github.super_mall.entity.cartEntity.Cart;
+
 import com.github.super_mall.entity.userDetailEntity.CustomUserDetails;
+import com.github.super_mall.repository.cartRepository.CartRepository;
 import com.github.super_mall.service.cartService.CartService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -21,11 +26,11 @@ import java.util.List;
 public class CartController {
 
     private final CartService cartService;
+    private final CartRepository cartRepository;
 
     // 장바구니에 담기
-    @PostMapping("/{itemId}/cart")
+    @PostMapping("/cart")
     public ResponseEntity<?> addToCart(
-            @PathVariable Integer itemId,
             @Valid @RequestBody CartItemRequestDto cartItemRequestDto,
             @AuthenticationPrincipal CustomUserDetails customUserDetails,
             BindingResult bindingResult){
@@ -39,34 +44,62 @@ public class CartController {
                 sb.append(fieldError.getDefaultMessage());
             }
 
-            return new ResponseEntity<String>(sb.toString(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(sb.toString(), HttpStatus.BAD_REQUEST);
         }
 
         String email = customUserDetails.getEmail();
-        Long cartItemId;
+
 
         try {
-            cartItemId = cartService.addCart(itemId, cartItemRequestDto, email);
+            cartService.addCart(cartItemRequestDto, email);
         } catch(Exception e){
-            return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
 
-        return new ResponseEntity<Long>(cartItemId, HttpStatus.OK);
+        return ResponseEntity.ok("해당 상품을 장바구니에 추가하였습니다.");
     }
 
     // 장바구니 조회
     @GetMapping("/cart-list")
-    public List<CartResponseDto> cartResponseDtoList(@AuthenticationPrincipal CustomUserDetails customUserDetails){
+    public CartListResponseDto myCartList(@AuthenticationPrincipal CustomUserDetails customUserDetails){
+        Cart cart = cartRepository.findByUser_UserId(customUserDetails.getUser_id());
         String email = customUserDetails.getEmail();
-        return cartService.findCartList(email);
+
+        List<CartResponseDto> cartResponseDtoList = cartService.findCartList(email);
+
+        int totalPrice = 0;
+        for (CartResponseDto cartResponseDto : cartResponseDtoList){
+            totalPrice += (cartResponseDto.getTotalPrice());
+        }
+
+        return CartListResponseDto.builder()
+                .cartResponseDtoList(cartResponseDtoList)
+                .totalPrice(totalPrice)
+                .build();
     }
 
-    // 장바구니에서 아이템 삭제
+    // 장바구니에서 상품 삭제
     @DeleteMapping("/cart-list/{cartItemId}")
     public ResponseEntity<?> deleteCartItem(@PathVariable Long cartItemId, @AuthenticationPrincipal CustomUserDetails customUserDetails){
         String email = customUserDetails.getEmail();
         cartService.deleteCartItem(email, cartItemId);
 
         return ResponseEntity.ok("해당 상품이 장바구니에서 삭제되었습니다.");
+    }
+
+    // 장바구니에서 주문하기
+    @PostMapping("/cart/orders")
+    public ResponseEntity<?> orderCartItems(@RequestBody CartOrderDto cartOrderDto, @AuthenticationPrincipal CustomUserDetails customUserDetails){
+        List<CartOrderDto> cartOrderDtoList = cartOrderDto.getCartOrderDtoList();
+
+        if (cartOrderDtoList == null || cartOrderDtoList.isEmpty()){
+            return new ResponseEntity<>("주문할 상품을 선택하세요!", HttpStatus.FORBIDDEN);
+        }
+
+        String email = customUserDetails.getEmail();
+
+        cartService.orderCartItems(cartOrderDtoList, email);
+
+        return ResponseEntity.ok("주문이 완료되었습니다.");
     }
 }

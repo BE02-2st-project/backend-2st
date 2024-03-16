@@ -40,6 +40,7 @@ CREATE TABLE `cart_items` (
                             `cart_item_id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
                             `cart_id` INT NOT NULL,
                             `item_id` INT NOT NULL,
+                            `price` INT NOT NULL,
                             `count` INT NOT NULL,
                             `create_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 );

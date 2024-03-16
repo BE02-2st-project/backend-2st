@@ -3,6 +3,7 @@ package com.github.super_mall.entity.itemEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.github.super_mall.dto.itemDto.ItemAdditionalDto;
 import com.github.super_mall.entity.categoryEntity.Category;
+import com.github.super_mall.exceptions.OutOfStockException;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -57,10 +58,18 @@ public class Item {
                 .build();
     }
 
+    // 상품 주문 시 재고 감소 메소드
     public void removeStock(Integer count) {
-        stock = stock - count;
+        int remainingStock = this.stock - count;
+
+        if (remainingStock < 0){
+            throw new OutOfStockException("상품의 재고가 부족합니다. (현재 재고 수량: " + this.stock + ")");
+        }
+
+        this.stock = remainingStock;
     }
 
+    // 주문 취소 시 상품 재고 증가 메소드
     public void addStock(Integer count) {
         stock = stock + count;
     }
