@@ -6,6 +6,7 @@ import com.github.super_mall.entity.userEntity.User;
 import com.github.super_mall.exceptions.LoginException;
 import com.github.super_mall.repository.refreshTokenRepository.RefreshTokenRepository;
 import com.github.super_mall.repository.userRepository.UserRepository;
+import com.github.super_mall.util.Constants;
 import com.github.super_mall.util.JwtTokenUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -13,6 +14,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
+import org.springframework.web.util.UriComponents;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
 import java.util.Optional;
@@ -55,7 +58,14 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
             refreshToken = findRefreshToken.getRefreshToken();
         }
 
-        response.sendRedirect("http://localhost:3000/auth/oauth-response/" + accessToken + "/3600/" + refreshToken + "/3600/");
+        UriComponents uriComponents = UriComponentsBuilder.newInstance()
+                        .scheme("http")
+                        .host("localhost:3000")
+                        .query("accessToken={value1}")
+                        .query("refreshToken={value2}")
+                                .buildAndExpand(accessToken, refreshToken);
+
+        response.sendRedirect(String.valueOf(uriComponents));
 
     }
 }
