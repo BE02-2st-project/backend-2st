@@ -1,11 +1,10 @@
 package com.github.super_mall.entity.userEntity;
 
+import com.github.super_mall.dto.userDto.UserDto;
 import com.github.super_mall.entity.userRoleEntity.UserRole;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -13,12 +12,14 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @Entity
 @Table(name = "users")
 @EntityListeners(AuditingEntityListener.class)
+@DynamicUpdate
 public class User {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,6 +41,8 @@ public class User {
     private String socialName;
     @Column(name = "social_user_id")
     private String socialUserId;
+    @Column(name = "deleted_at")
+    private LocalDateTime deletedAt;
 
     @CreatedDate
     @Column(updatable = false)
@@ -62,6 +65,15 @@ public class User {
         this.email = email;
         this.socialName = socialName;
         this.userName = userName;
+        return this;
+    }
+
+
+    public User updateUser(UserDto userDto) {
+        this.userName = userDto.getUserName();
+        this.address = userDto.getAddress();
+        this.phoneNumber = userDto.getPhoneNumber();
+        this.gender = userDto.getGender();
         return this;
     }
 }

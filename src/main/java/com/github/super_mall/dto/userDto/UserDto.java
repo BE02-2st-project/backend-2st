@@ -25,7 +25,10 @@ public class UserDto {
     private String phoneNumber;
     private String address;
     private String gender;
+    private String socialName;
+    private String socialUserId;
     private LocalDateTime createAt;
+    private LocalDateTime deletedAt;
 
     public UserDto(User user) {
         this.userId = user.getUserId();
@@ -35,6 +38,9 @@ public class UserDto {
         this.phoneNumber = user.getPhoneNumber();
         this.address = user.getAddress();
         this.gender = user.getGender();
+        this.socialName = user.getSocialName();
+        this.socialUserId = user.getSocialUserId();
         this.createAt = user.getCreateAt();
+        this.deletedAt = user.getDeletedAt();
     }
 }
