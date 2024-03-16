@@ -7,7 +7,7 @@ spring:
           kakao:
             client-id: 9d1f6f0404717c12fd5a3ad686aa0b86
             client-secret: L77B2VvRYbddE8N4TUEMdSJUhEIWrii5
-            redirect-uri: http://${SOCIAL_LOGIN_URL}/oauth2/callback/kakao
+            redirect-uri: http://${SOCIAL_LOGIN_URL}:8080/oauth2/callback/kakao
             authorization-grant-type: authorization_code
             client-authentication-method: client_secret_post
             scope:
@@ -15,7 +15,7 @@ spring:
           naver:
             client-id: ihgnoPdKxVScMuGlDSLK
             client-secret: JampI300Ym
-            redirect-uri: http://${SOCIAL_LOGIN_URL}/oauth2/callback/naver
+            redirect-uri: http://${SOCIAL_LOGIN_URL}:8080/oauth2/callback/naver
             authorization-grant-type: authorization_code
             scope:
               - email
