@@ -68,7 +68,7 @@ public class OrderController {
     }
 
     // 주문 취소
-    @PutMapping("/order/{orderId}")
+    @PostMapping("/order/{orderId}")
     public ResponseEntity<?> deleteOrder(@PathVariable Long orderId, @AuthenticationPrincipal CustomUserDetails customUserDetails){
         String email = customUserDetails.getEmail();
         orderService.deleteOrder(orderId, email);
