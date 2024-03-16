@@ -12,7 +12,8 @@ CREATE TABLE `users` (
                          `gender` VARCHAR(255)  NULL,
                          `social_user_id` VARCHAR(255) NULL,
                          `social_name` VARCHAR(255) NULL,
-                         `create_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+                         `create_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                         `deleted_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE `items` (
