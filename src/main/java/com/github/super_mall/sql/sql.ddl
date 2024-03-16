@@ -32,10 +32,18 @@ CREATE TABLE `categorys` (
                              `category_name` VARCHAR(255) NOT NULL
 );
 
-CREATE TABLE `baskets` (
-                           `basket_id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                           `user_id` INT NOT NULL,
-                           `item_id`INT NOT NULL
+CREATE TABLE `carts` (
+                        `cart_id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                        `user_id` INT NOT NULL
+);
+
+CREATE TABLE `cart_items` (
+                            `cart_item_id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                            `cart_id` INT NOT NULL,
+                            `item_id` INT NOT NULL,
+                            `price` INT NOT NULL,
+                            `count` INT NOT NULL,
+                            `create_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE `orders` (

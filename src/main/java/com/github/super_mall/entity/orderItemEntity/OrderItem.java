@@ -9,6 +9,7 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @Entity
+@Table(name = "order_item")
 public class OrderItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,17 +31,17 @@ public class OrderItem {
     private Integer count;
 
     // 주문할 아이템 생성 메소드
-    public static OrderItem createOrderItem(Item item, Integer price, Integer count){
+    public static OrderItem createOrderItem(Item item, Integer count){
         OrderItem orderItem = new OrderItem();
         orderItem.setItem(item);
-        orderItem.setPrice(price);
+        orderItem.setPrice(item.getPrice());
         orderItem.setCount(count);
-//        item.removeStock(count); // 아이템재고에서 count만큼 감소
+        item.removeStock(count); // 아이템재고에서 count만큼 감소
         return orderItem;
     }
 
     // 주문 취소 시 아이템에 stock 추가
-//    public void cancel(){
-//        getItem().addStock(count);
-//    }
+    public void cancel(){
+        this.getItem().addStock(count);
+    }
 }

@@ -30,15 +30,12 @@ public class OrderController {
     private final JwtTokenUtil jwtTokenUtil;
     private final OrderRepository orderRepository;
 
-    // 주문 생성
-    @PostMapping("/{itemId}/order")
+    // 상품 주문
+    @PostMapping("/order")
     public ResponseEntity<?> createOrder(
-                @PathVariable Integer itemId,
                 @Valid @RequestBody OrderRequestDto orderDto,
                 @AuthenticationPrincipal CustomUserDetails customUserDetails,
                 BindingResult bindingResult){
-
-
 
         if(bindingResult.hasErrors()){
             StringBuilder sb = new StringBuilder();
@@ -55,29 +52,27 @@ public class OrderController {
         Long orderId;
 
         try {
-            orderId = orderService.createOrder(itemId, orderDto, email);
+            orderService.createOrder(orderDto, email);
         } catch(Exception e){
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
 
-//        return new ResponseEntity<>(orderId, HttpStatus.OK);
         return ResponseEntity.ok("주문이 완료되었습니다.");
     }
 
     // 주문 조회
-    @GetMapping("/orders")
+    @GetMapping("/order-list")
     public List<OrderResponseDto> findAllOrder(@AuthenticationPrincipal CustomUserDetails customUserDetails){
         String email = customUserDetails.getEmail();
         return orderService.findAllOrder(email);
     }
 
     // 주문 취소
-//    @DeleteMapping("/order/{orderId}")
-//    public ResponseEntity<?> deleteOrder(@PathVariable Long orderId, @AuthenticationPrincipal CustomUserDetails customUserDetails){
-//        String email = customUserDetails.getEmail();
-//        orderService.deleteOrder(orderId, email);
-//
-//        return ResponseEntity.ok("주문이 취소되었습니다.");
-//    }
+    @PostMapping("/order/{orderId}")
+    public ResponseEntity<?> deleteOrder(@PathVariable Long orderId, @AuthenticationPrincipal CustomUserDetails customUserDetails){
+        String email = customUserDetails.getEmail();
+        orderService.deleteOrder(orderId, email);
 
+        return ResponseEntity.ok("주문이 취소되었습니다.");
+    }
 }
