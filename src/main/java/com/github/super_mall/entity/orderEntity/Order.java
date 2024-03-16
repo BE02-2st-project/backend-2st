@@ -31,6 +31,7 @@ public class Order {
     private User user;
 
     // 주문할 아이템의 리스트를 들고온다.
+    @Builder.Default
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<OrderItem> orderItemList = new ArrayList<>();
 

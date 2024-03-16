@@ -71,10 +71,16 @@ dependencies {
     // oauth
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 
+    // maria db
+    runtimeOnly 'org.mariadb.jdbc:mariadb-java-client:2.7.2'
 
 
 }
 
 tasks.named('test') {
     useJUnitPlatform()
+}
+
+tasks.named('bootJar') {
+    mainClass = "com.github.super_mall.SuperMallApplication"
 }
