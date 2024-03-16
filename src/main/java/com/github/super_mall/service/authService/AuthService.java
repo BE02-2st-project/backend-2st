@@ -27,6 +27,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.security.Principal;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -75,6 +77,10 @@ public class AuthService {
         User findUser = userRepository.findByEmail(loginDTO.getEmail()).orElseThrow(
                 () -> new LoginException("회원을 찾을 수 없습니다")
         );
+
+        if (findUser.getDeletedAt() != null) {
+            throw new LoginException("회원을 찾을 수 없습니다");
+        }
 
         if(passwordEncoder.matches(findUser.getPassword(), loginDTO.getPassword())) {
             throw new LoginException("비밀번호가 맞지 않슴니다.");
@@ -132,4 +138,16 @@ public class AuthService {
 
     }
 
+    public UserDto secession(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(
+                () -> new LoginException("유저가 없습니다")
+        );
+
+        Date now = new Date();
+        LocalDateTime localDateTime = now.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+        user.setDeletedAt(localDateTime);
+
+        User updateUser = userRepository.save(user);
+        return new UserDto(updateUser);
+    }
 }
