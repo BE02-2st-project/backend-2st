@@ -1,7 +1,9 @@
 package com.github.super_mall.config.securityConfig;
 
+import com.github.super_mall.config.oAuthConfig.OAuth2SuccessHandler;
 import com.github.super_mall.filter.JwtAuthenticationFilter;
 import com.github.super_mall.service.logoutService.LogoutService;
+import com.github.super_mall.service.oauth2UserService.CustomOAuth2UserService;
 import com.github.super_mall.util.JwtTokenUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -14,6 +16,7 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -24,6 +27,8 @@ public class SecurityConfiguration {
 
     private final JwtTokenUtil jwtTokenUtil;
     private final LogoutService logoutService;
+    private final DefaultOAuth2UserService customOAuth2UserService;
+    private final OAuth2SuccessHandler oAuth2SuccessHandler;
     @Bean
     public SecurityFilterChain filterChain (HttpSecurity http) throws Exception {
         http.headers(httpSecurityHeadersConfigurer -> httpSecurityHeadersConfigurer.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin))
@@ -34,10 +39,16 @@ public class SecurityConfiguration {
                 .formLogin(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests((authorize) -> authorize
-                        .requestMatchers("/api/signup", "/api/login", "/api/refreshToken", "/api-docs", "/swagger-ui/index.html").permitAll()
+                        .requestMatchers("/api/signup", "/api/login", "/api/refreshToken", "/oauth2/**").permitAll()
                         .requestMatchers("/api/**").hasRole("USER")
                 )
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenUtil), UsernamePasswordAuthenticationFilter.class)
+                .oauth2Login(oauth -> oauth
+                        .authorizationEndpoint(endpoint -> endpoint.baseUri("/api/v1/auth/oauth2"))
+                        .redirectionEndpoint(endpoint -> endpoint.baseUri("/oauth2/callback/*"))
+                        .userInfoEndpoint(endpoint -> endpoint.userService(customOAuth2UserService))
+                        .successHandler(oAuth2SuccessHandler)
+                )
                 .logout((logout) -> logout
                         .logoutUrl("/api/logout").permitAll()
                         .addLogoutHandler(logoutService)

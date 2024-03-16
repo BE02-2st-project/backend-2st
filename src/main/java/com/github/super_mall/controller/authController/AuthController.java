@@ -42,9 +42,15 @@ public class AuthController {
     }
 
     @PostMapping("/refreshToken")
-    public ResponseEntity<?> refresh (HttpServletRequest request, HttpServletResponse response) {
+    public ResponseEntity<String> refresh (HttpServletRequest request, HttpServletResponse response) {
         String msg = authService.refresh(request, response);
         return ResponseEntity.ok(msg);
+    }
+
+    @PutMapping("/deleted/{userId}")
+    public ResponseEntity<UserDto> secession (@PathVariable Long userId) {
+        UserDto userDto = authService.secession(userId);
+        return ResponseEntity.ok(userDto);
     }
 
 }

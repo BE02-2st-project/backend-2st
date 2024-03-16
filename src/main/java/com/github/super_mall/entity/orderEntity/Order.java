@@ -76,9 +76,8 @@ public class Order {
         return orderTotalPrice;
     }
 
-
-//    // 주문 취소
-//    public void orderCancel(){
+    // 주문 취소 메소드
+//    public void deleteOrder() {
 //        this.setStatus(OrderStatus.CANCEL);
 //        for(OrderItem orderItem : orderItemList){
 //            orderItem.cancel();
