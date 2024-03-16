@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
 
@@ -22,7 +23,7 @@ public class Item {
     @Column(name = "item_id")
     private Integer id;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
 
@@ -41,6 +42,7 @@ public class Item {
     @Column(name = "item_description")
     private String description;
 
+    @DateTimeFormat(pattern = "yyyy-mm-dd hh:mm:ss")
     @Column(name = "create_at")
     private LocalDateTime createAt;
 

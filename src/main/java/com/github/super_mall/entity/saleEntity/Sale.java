@@ -5,6 +5,7 @@ import com.github.super_mall.entity.itemEntity.Item;
 import com.github.super_mall.entity.userEntity.User;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
 
@@ -34,6 +35,7 @@ public class Sale {
     @Column(name = "stock")
     private Integer stock;
 
+    @DateTimeFormat(pattern = "yyyy-mm-dd hh:mm:ss")
     @Column(name = "create_at")
     private LocalDateTime createAt;
 

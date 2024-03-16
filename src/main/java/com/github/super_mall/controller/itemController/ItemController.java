@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Tag(name = "Example", description = "Example API")
+//@Tag(name = "Example", description = "Example API")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/items")
