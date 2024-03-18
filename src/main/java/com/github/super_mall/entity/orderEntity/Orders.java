@@ -1,8 +1,5 @@
 package com.github.super_mall.entity.orderEntity;
 
-import com.github.super_mall.dto.cartDto.CartListResponseDto;
-import com.github.super_mall.entity.cartItemEntity.CartItem;
-import com.github.super_mall.entity.itemEntity.Item;
 import com.github.super_mall.entity.orderItemEntity.OrderItem;
 import com.github.super_mall.entity.userEntity.User;
 import jakarta.persistence.*;
@@ -20,7 +17,7 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 @Table(name = "orders")
-public class Order {
+public class Orders {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "order_Id")
@@ -32,7 +29,7 @@ public class Order {
 
     // 주문할 아이템의 리스트를 들고온다.
     @Builder.Default
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "orders", cascade = CascadeType.ALL)
     private List<OrderItem> orderItemList = new ArrayList<>();
 
     // 총 금액
@@ -53,21 +50,21 @@ public class Order {
     // OrderItem 생성 메소드
     public void addOrderItem(OrderItem orderItem){
         orderItemList.add(orderItem);
-        orderItem.setOrder(this);
+        orderItem.setOrders(this);
     }
 
     // 생성 메소드
-    public static Order createOrder(User user, List<OrderItem> orderItemList){
-        Order order = new Order();
-        order.setUser(user);
+    public static Orders createOrder(User user, List<OrderItem> orderItemList){
+        Orders orders = new Orders();
+        orders.setUser(user);
 
         for (OrderItem orderItem : orderItemList){
-            order.addOrderItem(orderItem);
+            orders.addOrderItem(orderItem);
         }
-        order.setStatus(OrderStatus.ORDER);
-        order.setCreateAt(LocalDateTime.now());
+        orders.setStatus(OrderStatus.ORDER);
+        orders.setCreateAt(LocalDateTime.now());
 
-        return order;
+        return orders;
     }
 
     // 총 가격

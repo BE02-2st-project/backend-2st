@@ -1,7 +1,7 @@
 package com.github.super_mall.entity.orderItemEntity;
 
 import com.github.super_mall.entity.itemEntity.Item;
-import com.github.super_mall.entity.orderEntity.Order;
+import com.github.super_mall.entity.orderEntity.Orders;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -22,7 +22,7 @@ public class OrderItem {
 
     @ManyToOne
     @JoinColumn(name = "order_id")
-    private Order order;
+    private Orders orders;
 
     @Column(name = "price")
     private Integer price;
