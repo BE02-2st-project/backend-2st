@@ -29,13 +29,6 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         // 클라이언트의 이름 가지고 오기
         String oauthClientName = request.getClientRegistration().getClientName();
 
-//        try {
-//            log.info("정보 = {}", new ObjectMapper().writeValueAsString(oAuth2User.getAttributes()));
-//            System.out.println(new ObjectMapper().writeValueAsString(oAuth2User.getAttributes()));
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-
         // 카카오, 네이버 정보를 가지고 User 엔티티 만들고 저장하기
         User user = null;
         String socialUserId = null;
@@ -48,6 +41,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         }
 
         if(oauthClientName.equals("naver")) {
+            @SuppressWarnings("unchecked")
             Map<String, String> responseMap = (Map<String, String>) oAuth2User.getAttributes().get("response");
             socialUserId = "naver_" + responseMap.get("id").substring(0, 14);
             email = responseMap.get("email");

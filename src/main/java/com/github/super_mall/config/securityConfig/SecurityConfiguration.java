@@ -39,8 +39,8 @@ public class SecurityConfiguration {
                 .formLogin(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests((authorize) -> authorize
-                        .requestMatchers("/api/signup", "/api/login", "/api/refreshToken", "/oauth2/**").permitAll()
-                        .requestMatchers("/api/**").hasRole("USER")
+                        .requestMatchers("/api/signup", "/api/login", "/api/refreshToken", "/oauth2/**", "/api/items").permitAll()
+                        .anyRequest().authenticated()
                 )
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenUtil), UsernamePasswordAuthenticationFilter.class)
                 .oauth2Login(oauth -> oauth
