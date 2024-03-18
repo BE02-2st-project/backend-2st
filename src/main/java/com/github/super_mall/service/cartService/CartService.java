@@ -21,6 +21,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.jaxb.SpringDataJaxb;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -80,8 +82,16 @@ public class CartService {
         return cartResponseDtoList;
     }
 
+    // 장바구니에서 상품 수량 업데이트
+    public void updateCartItemCount(Long cartItemId, Integer count){
+        CartItem cartItem = cartItemRepository.findById(cartItemId)
+                .orElseThrow(EntityNotFoundException::new);
+
+        cartItem.updateCount(count);
+    }
+
     // 장바구니에서 상품 삭제
-    public void deleteCartItem(String email, Long cartItemId){
+    public void deleteCartItem(Long cartItemId){
         CartItem cartItem = cartItemRepository.findById(cartItemId)
                 .orElseThrow(EntityNotFoundException::new);
         cartItemRepository.delete(cartItem);
@@ -110,5 +120,23 @@ public class CartService {
 
             cartItemRepository.delete(cartItem);
         }
+    }
+
+    // 회원검증
+    @Transactional(readOnly = true)
+    public boolean validateCartItem(Long cartItemId, String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(EntityNotFoundException::new);
+
+        CartItem cartItem = cartItemRepository.findById(cartItemId)
+                .orElseThrow(EntityNotFoundException::new);
+
+        User cartSaveUser = cartItem.getCart().getUser();
+
+        if (!user.equals(cartSaveUser)){
+            return false;
+        }
+
+        return true;
     }
 }

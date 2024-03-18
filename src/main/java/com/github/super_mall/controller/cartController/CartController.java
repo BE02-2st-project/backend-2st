@@ -1,5 +1,6 @@
 package com.github.super_mall.controller.cartController;
 
+import com.github.super_mall.dto.cartDto.CartCountUpdateRequestDto;
 import com.github.super_mall.dto.cartDto.CartItemRequestDto;
 import com.github.super_mall.dto.cartDto.CartListResponseDto;
 import com.github.super_mall.dto.cartDto.CartResponseDto;
@@ -78,11 +79,39 @@ public class CartController {
                 .build();
     }
 
+    // 장바구니에서 상품 수량 업데이트
+    @PatchMapping("/cart-list/{cartItemId}")
+    public ResponseEntity<?> updateCartItem(
+            @PathVariable Long cartItemId,
+            @RequestBody CartCountUpdateRequestDto cartCountUpdateRequestDto,
+            @AuthenticationPrincipal CustomUserDetails customUserDetails
+           ){
+
+        String email = customUserDetails.getEmail();
+        Integer count = cartCountUpdateRequestDto.getCount();
+
+        if(count <= 0){
+            return new ResponseEntity<String>("최소 1개 이상 담아주세요", HttpStatus.BAD_REQUEST);
+        } else if(!cartService.validateCartItem(cartItemId, email)){ // cartService 에서 검증 로직 발동!
+            return new ResponseEntity<String>("수정 권한이 없습니다.", HttpStatus.FORBIDDEN);
+        }
+
+        cartService.updateCartItemCount(cartItemId, count);
+
+        return ResponseEntity.ok("수량이 변경되었습니다.");
+    }
+
+
     // 장바구니에서 상품 삭제
     @DeleteMapping("/cart-list/{cartItemId}")
     public ResponseEntity<?> deleteCartItem(@PathVariable Long cartItemId, @AuthenticationPrincipal CustomUserDetails customUserDetails){
         String email = customUserDetails.getEmail();
-        cartService.deleteCartItem(email, cartItemId);
+
+        if(!cartService.validateCartItem(cartItemId, email)){
+            return new ResponseEntity<String>("수정 권한이 없습니다.", HttpStatus.FORBIDDEN);
+        }
+
+        cartService.deleteCartItem(cartItemId);
 
         return ResponseEntity.ok("해당 상품이 장바구니에서 삭제되었습니다.");
     }
