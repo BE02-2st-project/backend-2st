@@ -57,7 +57,7 @@ public class OrderController {
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
 
-        return ResponseEntity.ok("주문이 완료되었습니다.");
+        return new ResponseEntity<String>("주문이 완료되었습니다.", HttpStatus.OK);
     }
 
     // 주문 조회
@@ -68,11 +68,16 @@ public class OrderController {
     }
 
     // 주문 취소
-    @PostMapping("/order/{orderId}")
+    @PatchMapping("/order/{orderId}")
     public ResponseEntity<?> deleteOrder(@PathVariable Long orderId, @AuthenticationPrincipal CustomUserDetails customUserDetails){
         String email = customUserDetails.getEmail();
-        orderService.deleteOrder(orderId, email);
 
-        return ResponseEntity.ok("주문이 취소되었습니다.");
+        if (!orderService.validateOrder(orderId, email)){
+            return new ResponseEntity<>("주문 취소 권한이 없습니다", HttpStatus.FORBIDDEN);
+        }
+
+        orderService.deleteOrder(orderId);
+
+        return new ResponseEntity<String>("주문이 취소되었습니다.", HttpStatus.OK);
     }
 }

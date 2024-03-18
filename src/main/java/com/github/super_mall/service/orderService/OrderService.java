@@ -21,6 +21,7 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -97,8 +98,26 @@ public class OrderService {
     }
 
     // 주문 취소
-    public void deleteOrder(Long orderId, String email) {
+    public void deleteOrder(Long orderId) {
         Order order = orderRepository.findById(orderId).orElseThrow(EntityNotFoundException::new);
         order.deleteOrder();
+    }
+
+    // DB에 있는 email과 주문자 email 비교
+    @Transactional(readOnly = true)
+    public boolean validateOrder(Long orderId, String email){
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(EntityNotFoundException::new);
+
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(EntityNotFoundException::new);
+
+        User orderSaveUser = order.getUser(); // 주문을 한 유저의 정보를 받기
+
+        if(!user.getEmail().equals(orderSaveUser.getEmail())){
+            return false;
+        }
+
+        return true;
     }
 }
