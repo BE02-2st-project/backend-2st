@@ -2,16 +2,12 @@ package com.github.super_mall.controller.orderController;
 
 import com.github.super_mall.dto.orderDto.OrderRequestDto;
 import com.github.super_mall.dto.orderDto.OrderResponseDto;
-import com.github.super_mall.entity.orderEntity.Order;
 import com.github.super_mall.entity.userDetailEntity.CustomUserDetails;
-import com.github.super_mall.entity.userEntity.User;
 import com.github.super_mall.repository.orderRepository.OrderRepository;
 import com.github.super_mall.service.orderService.OrderService;
 import com.github.super_mall.util.JwtTokenUtil;
-import jakarta.persistence.NoResultException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;

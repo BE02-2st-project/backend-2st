@@ -1,12 +1,11 @@
 package com.github.super_mall.dto.orderDto;
 
-import com.github.super_mall.entity.orderEntity.Order;
+import com.github.super_mall.entity.orderEntity.Orders;
 import com.github.super_mall.entity.orderEntity.OrderStatus;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,9 +22,9 @@ public class OrderResponseDto {
         orderItemResponseDtoList.add(orderItemResponseDto);
     }
 
-    public OrderResponseDto(Order order) {
-        this.orderId = order.getOderId();
-        this.orderDate = order.getCreateAt();
-        this.orderStatus = order.getStatus();
+    public OrderResponseDto(Orders orders) {
+        this.orderId = orders.getOderId();
+        this.orderDate = orders.getCreateAt();
+        this.orderStatus = orders.getStatus();
     }
 }

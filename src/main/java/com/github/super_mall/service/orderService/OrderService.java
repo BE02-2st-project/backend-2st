@@ -1,14 +1,10 @@
 package com.github.super_mall.service.orderService;
 
-import com.github.super_mall.dto.cartDto.CartListResponseDto;
-import com.github.super_mall.dto.cartDto.CartResponseDto;
 import com.github.super_mall.dto.orderDto.OrderItemResponseDto;
 import com.github.super_mall.dto.orderDto.OrderRequestDto;
 import com.github.super_mall.dto.orderDto.OrderResponseDto;
-import com.github.super_mall.entity.cartEntity.Cart;
-import com.github.super_mall.entity.cartItemEntity.CartItem;
 import com.github.super_mall.entity.itemEntity.Item;
-import com.github.super_mall.entity.orderEntity.Order;
+import com.github.super_mall.entity.orderEntity.Orders;
 import com.github.super_mall.entity.orderItemEntity.OrderItem;
 import com.github.super_mall.entity.userEntity.User;
 import com.github.super_mall.exceptions.LoginException;
@@ -16,7 +12,6 @@ import com.github.super_mall.repository.cartRepository.CartRepository;
 import com.github.super_mall.repository.itemRepository.ItemRepository;
 import com.github.super_mall.repository.orderRepository.OrderRepository;
 import com.github.super_mall.repository.userRepository.UserRepository;
-import com.github.super_mall.service.cartService.CartService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -50,9 +45,9 @@ public class OrderService {
         OrderItem orderItem = OrderItem.createOrderItem(item, orderDto.getCount());
         orderItemList.add(orderItem);
 
-        Order order = Order.createOrder(user, orderItemList);
-        order.setTotalPrice(order.getTotalPrice());
-        orderRepository.save(order);
+        Orders orders = Orders.createOrder(user, orderItemList);
+        orders.setTotalPrice(orders.getTotalPrice());
+        orderRepository.save(orders);
     }
 
     // 장바구니에서 주문할 상품리스트를 받아서 주문 생성
@@ -71,21 +66,21 @@ public class OrderService {
             orderItemList.add(orderItem);
         }
 
-        Order order = Order.createOrder(user, orderItemList);
-        order.setTotalPrice(order.getTotalPrice());
+        Orders orders = Orders.createOrder(user, orderItemList);
+        orders.setTotalPrice(orders.getTotalPrice());
 
-        orderRepository.save(order);
+        orderRepository.save(orders);
     }
 
     // 주문 조회
     public List<OrderResponseDto> findAllOrder(String email) {
-        List<Order> orderList = orderRepository.findOrders(email);
+        List<Orders> ordersList = orderRepository.findOrders(email);
 
         List<OrderResponseDto> orderResponseDtoList = new ArrayList<>();
 
-        for(Order order : orderList){
-            OrderResponseDto orderResponseDto = new OrderResponseDto(order);
-            List<OrderItem> orderItemList = order.getOrderItemList();
+        for(Orders orders : ordersList){
+            OrderResponseDto orderResponseDto = new OrderResponseDto(orders);
+            List<OrderItem> orderItemList = orders.getOrderItemList();
             for(OrderItem orderItem : orderItemList){
                 OrderItemResponseDto orderItemResponseDto = new OrderItemResponseDto(orderItem);
                 orderResponseDto.addOrderItemDto(orderItemResponseDto);
@@ -99,8 +94,8 @@ public class OrderService {
 
     // 주문 취소
     public void deleteOrder(Long orderId) {
-        Order order = orderRepository.findById(orderId).orElseThrow(EntityNotFoundException::new);
-        order.deleteOrder();
+        Orders orders = orderRepository.findById(orderId).orElseThrow(EntityNotFoundException::new);
+        orders.deleteOrder();
     }
 
     // DB에 있는 email과 주문자 email 비교
@@ -109,10 +104,10 @@ public class OrderService {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(EntityNotFoundException::new);
 
-        Order order = orderRepository.findById(orderId)
+        Orders orders = orderRepository.findById(orderId)
                 .orElseThrow(EntityNotFoundException::new);
 
-        User orderSaveUser = order.getUser(); // 주문을 한 유저의 정보를 받기
+        User orderSaveUser = orders.getUser(); // 주문을 한 유저의 정보를 받기
 
         if(!user.getEmail().equals(orderSaveUser.getEmail())){
             return false;
