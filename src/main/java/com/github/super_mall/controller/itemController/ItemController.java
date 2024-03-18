@@ -2,9 +2,10 @@ package com.github.super_mall.controller.itemController;
 
 import com.github.super_mall.dto.itemDto.ItemRegisterDto;
 import com.github.super_mall.entity.itemEntity.Item;
+import com.github.super_mall.entity.saleEntity.Sale;
 import com.github.super_mall.entity.userDetailEntity.CustomUserDetails;
 import com.github.super_mall.service.itemService.ItemService;
-import io.swagger.v3.oas.annotations.tags.Tag;
+import com.github.super_mall.service.saleService.SaleService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-//@Tag(name = "Example", description = "Example API")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/items")
@@ -21,6 +21,7 @@ import java.util.List;
 public class ItemController {
 
     private final ItemService itemService;
+    private final SaleService saleService;
 
     @GetMapping
     public List<Item> findAllItem() {
@@ -48,6 +49,11 @@ public class ItemController {
     public ResponseEntity<?> deleteProduct(@PathVariable Integer itemId) {
         itemService.deleteProduct(itemId);
         return ResponseEntity.ok("상품이 삭제되었습니다!");
+    }
+
+    @GetMapping("/sales")
+    public List<Sale> findAllSaleItem(@AuthenticationPrincipal CustomUserDetails user) {
+        return saleService.findSaleItem(user.getUser_id());
     }
 
 }

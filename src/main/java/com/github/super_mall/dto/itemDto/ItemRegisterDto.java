@@ -4,6 +4,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Getter
 @Setter
 @Builder
@@ -15,6 +18,6 @@ public class ItemRegisterDto {
     private String name;
     private Integer price;
     private Integer stock;
-    private String imgURL;
+    private List<String> imgURLs = new ArrayList<>();
     private String description;
 }

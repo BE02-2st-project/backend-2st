@@ -11,6 +11,8 @@ import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Getter
@@ -31,8 +33,8 @@ public class Item {
     @Column(name = "item_name")
     private String name;
 
-    @Column(name = "img")
-    private String imgURL;
+    @OneToMany(mappedBy = "item")
+    private List<ItemImage> imgURLs;
 
     @Column(name = "price")
     private Integer price;
@@ -47,13 +49,15 @@ public class Item {
     @Column(name = "create_at")
     private LocalDateTime createAt;
 
+    @Column(name = "is_delete")
+    private boolean isDelete = false;
+
     public static Item toEntity(ItemRegisterDto addItem, Category category) {
         return Item.builder()
                 .category(category)
                 .name(addItem.getName())
                 .price(addItem.getPrice())
                 .stock(addItem.getStock())
-                .imgURL(addItem.getImgURL())
                 .description(addItem.getDescription())
                 .createAt(LocalDateTime.now())
                 .build();
@@ -73,5 +77,9 @@ public class Item {
     // 주문 취소 시 상품 재고 증가 메소드
     public void addStock(Integer count) {
         stock = stock + count;
+    }
+
+    public void deleteItem() {
+        isDelete = true;
     }
 }

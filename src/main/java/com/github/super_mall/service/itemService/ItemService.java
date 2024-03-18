@@ -1,10 +1,12 @@
 package com.github.super_mall.service.itemService;
 
 import com.github.super_mall.dto.itemDto.ItemRegisterDto;
+import com.github.super_mall.entity.itemEntity.ItemImage;
 import com.github.super_mall.entity.saleEntity.Sale;
 import com.github.super_mall.entity.userEntity.User;
 import com.github.super_mall.exceptions.NotFoundCategoryException;
 import com.github.super_mall.repository.categoryRepository.CategoryRepository;
+import com.github.super_mall.repository.itemRepository.ItemImageRepository;
 import com.github.super_mall.repository.itemRepository.ItemRepository;
 import com.github.super_mall.repository.saleRepository.SaleRepository;
 import com.github.super_mall.repository.userRepository.UserRepository;
@@ -15,6 +17,7 @@ import com.github.super_mall.entity.itemEntity.Item;
 import com.github.super_mall.entity.categoryEntity.Category;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -23,13 +26,16 @@ public class ItemService {
     private final CategoryRepository categoryRepository;
     private final UserRepository userRepository;
     private final SaleRepository saleRepository;
+    private final ItemImageRepository itemImageRepository;
 
     public List<Item> findAllItem() {
         return itemRepository.findAll();
     }
 
     public List<Item> findByNameContaining(String nameKeyword) {
-        return itemRepository.findItemByNameContaining(nameKeyword);
+        return itemRepository.findItemByNameContaining(nameKeyword).stream()
+                .filter(item -> !item.isDelete())
+                .collect(Collectors.toList());
     }
 
     @Transactional
@@ -42,8 +48,13 @@ public class ItemService {
 
         Item item = Item.toEntity(addItem, category);
         Sale sale = Sale.toEntity(item, user);
+
         itemRepository.save(item);
         saleRepository.save(sale);
+
+        addItem.getImgURLs().forEach(image -> {
+            itemImageRepository.save(ItemImage.toEntity(image, item));
+        });
     }
 
     @Transactional
@@ -68,6 +79,7 @@ public class ItemService {
     public void deleteProduct(Integer itemId) {
         Item itemEntity = itemRepository.findById(itemId)
                 .orElseThrow(() -> new RuntimeException("존재하지 않는 상품입니다."));
-//        itemEntity.setIsDelete(true);
+        if (itemEntity.isDelete()) throw new RuntimeException("이미 삭제된 상품입니다.");
+        itemEntity.deleteItem();
     }
 }
