@@ -1,6 +1,7 @@
 package com.github.super_mall.controller.authController;
 
 import com.github.super_mall.dto.loginDTO.LoginDTO;
+import com.github.super_mall.dto.loginDTO.LoginResponseDto;
 import com.github.super_mall.dto.refreshTokenDto.RefreshTokenDto;
 import com.github.super_mall.dto.signupDto.SignupDTO;
 import com.github.super_mall.dto.userDto.UserDto;
@@ -38,7 +39,7 @@ public class AuthController {
         if(bindingResult.hasErrors()) {
             return ResponseEntity.badRequest().body(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
         }
-       UserDto user = authService.login(loginDTO, response);
+       LoginResponseDto user = authService.login(loginDTO, response);
         return ResponseEntity.ok(user);
     }
 
