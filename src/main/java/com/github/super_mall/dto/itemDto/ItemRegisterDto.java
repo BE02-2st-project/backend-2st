@@ -16,6 +16,7 @@ public class ItemRegisterDto {
     private Integer itemId;
     private String category;
     private String name;
+    private String color;
     private Integer price;
     private Integer stock;
     private List<String> imgURLs = new ArrayList<>();
