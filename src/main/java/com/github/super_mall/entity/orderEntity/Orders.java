@@ -77,7 +77,7 @@ public class Orders {
     }
 
     // 주문 취소 메소드
-    public void deleteOrder() {
+    public void cancelOrder() {
         this.status = OrderStatus.CANCEL;
         for(OrderItem orderItem : orderItemList){
             orderItem.cancel();

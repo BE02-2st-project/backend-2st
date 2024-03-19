@@ -93,9 +93,9 @@ public class OrderService {
     }
 
     // 주문 취소
-    public void deleteOrder(Long orderId) {
+    public void cancelOrder(Long orderId) {
         Orders orders = orderRepository.findById(orderId).orElseThrow(EntityNotFoundException::new);
-        orders.deleteOrder();
+        orders.cancelOrder();
     }
 
     // DB에 있는 email과 주문자 email 비교
