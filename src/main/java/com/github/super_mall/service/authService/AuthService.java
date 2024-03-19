@@ -1,6 +1,7 @@
 package com.github.super_mall.service.authService;
 
 import com.github.super_mall.dto.loginDTO.LoginDTO;
+import com.github.super_mall.dto.refreshTokenDto.RefreshTokenDto;
 import com.github.super_mall.dto.signupDto.SignupDTO;
 import com.github.super_mall.dto.userDto.UserDto;
 import com.github.super_mall.entity.refreshTokenEntity.RefreshToken;
@@ -106,17 +107,13 @@ public class AuthService {
     }
 
 
-    public String refresh(HttpServletRequest request, HttpServletResponse response) {
-        if(request.getHeader(Constants.HEADER_ACCESSTOKEN_KEY) == null || request.getHeader(Constants.HEADER_REFRESHTOKEN_KEY) == null) {
-            throw new LoginException("accessToken, refreshToken 중 하나가 없습니다.");
+    public String refresh(RefreshTokenDto refreshTokenDto, HttpServletResponse response) {
+        if( refreshTokenDto.getRefreshToken() == null) {
+            throw new LoginException("refreshToken이 없습니다.");
         }
 
 
-        String token = jwtTokenUtil.resolveToken(request);
-        String email = jwtTokenUtil.getUserEmail(token);
-
-
-        User user = userRepository.findByEmail(email).orElseThrow(
+        User user = userRepository.findByEmail(refreshTokenDto.getEmail()).orElseThrow(
                 () -> new LoginException("회원을 찾을 수 없습니다")
            );
 
@@ -129,11 +126,11 @@ public class AuthService {
             throw new LoginException("refreshToken의 기간이 만료 되었습니다. 다시 로그인 해주세요");
         }
 
-        if (!refreshToken.getRefreshToken().equals(request.getHeader(Constants.HEADER_REFRESHTOKEN_KEY))) {
+        if (!refreshToken.getRefreshToken().equals(refreshTokenDto.getRefreshToken())) {
             throw new LoginException("accessToken을 발급 할 수 없습니다.");
         }
 
-        response.addHeader(Constants.HEADER_ACCESSTOKEN_KEY, jwtTokenUtil.createAccessToken(email));
+        response.addHeader(Constants.HEADER_ACCESSTOKEN_KEY, jwtTokenUtil.createAccessToken(refreshTokenDto.getEmail()));
         return "accessToken이 발급 되었습니다.";
 
     }

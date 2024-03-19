@@ -18,6 +18,7 @@ import static java.lang.System.getenv;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class JwtTokenUtil {
     private Map<String, String> env = getenv();
     private Date now = new Date();
@@ -54,17 +55,21 @@ public class JwtTokenUtil {
     }
 
     public boolean validation (String token) {
-//        boolean isInCompeteToken = isExpired(token);
         return Jwts.parser().setSigningKey(env.get("SECRET_KEY")).parseClaimsJws(token) != null;
     }
 
     public boolean isExpired (String token) {
-        return Jwts.parser()
-                .setSigningKey(env.get("SECRET_KEY"))
-                .parseClaimsJws(token)
-                .getBody()
-                .getExpiration()
-                .before(now);
+        try {
+            return Jwts.parser()
+                    .setSigningKey(env.get("SECRET_KEY"))
+                    .parseClaimsJws(token)
+                    .getBody()
+                    .getExpiration()
+                    .before(now);
+        } catch (Exception e) {
+            return false;
+        }
+
     }
 
     public Authentication getAuthentication (String token) {
@@ -74,10 +79,14 @@ public class JwtTokenUtil {
     }
 
     public String getUserEmail (String token) {
-        return Jwts.parser()
-                .setSigningKey(env.get("SECRET_KEY"))
-                .parseClaimsJws(token)
-                .getBody()
-                .get("email", String.class);
+        try {
+            return Jwts.parser()
+                    .setSigningKey(env.get("SECRET_KEY"))
+                    .parseClaimsJws(token)
+                    .getBody()
+                    .get("email", String.class);
+        } catch (Exception e) {
+            return "이메일을 찾을 수 업슷비다";
+        }
     }
 }

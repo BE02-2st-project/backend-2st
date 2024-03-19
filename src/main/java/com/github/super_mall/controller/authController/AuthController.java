@@ -1,6 +1,7 @@
 package com.github.super_mall.controller.authController;
 
 import com.github.super_mall.dto.loginDTO.LoginDTO;
+import com.github.super_mall.dto.refreshTokenDto.RefreshTokenDto;
 import com.github.super_mall.dto.signupDto.SignupDTO;
 import com.github.super_mall.dto.userDto.UserDto;
 import com.github.super_mall.service.authService.AuthService;
@@ -42,8 +43,8 @@ public class AuthController {
     }
 
     @PostMapping("/refreshToken")
-    public ResponseEntity<String> refresh (HttpServletRequest request, HttpServletResponse response) {
-        String msg = authService.refresh(request, response);
+    public ResponseEntity<String> refresh (@RequestBody RefreshTokenDto refreshTokenDto, HttpServletResponse response) {
+        String msg = authService.refresh(refreshTokenDto, response);
         return ResponseEntity.ok(msg);
     }
 
