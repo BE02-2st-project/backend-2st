@@ -33,6 +33,9 @@ public class Item {
     @Column(name = "item_name")
     private String name;
 
+    @Column(name = "color")
+    private String color;
+
     @OneToMany(mappedBy = "item")
     private List<ItemImage> imgURLs;
 
@@ -56,6 +59,7 @@ public class Item {
         return Item.builder()
                 .category(category)
                 .name(addItem.getName())
+                .color(addItem.getColor())
                 .price(addItem.getPrice())
                 .stock(addItem.getStock())
                 .description(addItem.getDescription())
