@@ -87,15 +87,14 @@ CREATE TABLE `refresh_tokens` (
                                   `refresh_token` VARCHAR(255) NOT NULL
 );
 
-create table item_image
-(
-    image_id  int auto_increment
-        primary key,
-    item_id   int          not null,
-    image_url varchar(255) not null
+create table item_image(
+                        image_id int auto_increment primary key,
+                        item_id int not null,
+                        image_url varchar(255) not null
 );
 
 alter table items
     add is_delete boolean default false,
     add color varchar(30) not null;
 
+git
