@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
@@ -61,6 +62,7 @@ public class CartController {
     }
 
     // 장바구니 조회
+    @Transactional
     @GetMapping("/cart-list")
     public CartListResponseDto myCartList(@AuthenticationPrincipal CustomUserDetails customUserDetails){
         Cart cart = cartRepository.findByUser_UserId(customUserDetails.getUser_id());
@@ -80,7 +82,8 @@ public class CartController {
     }
 
     // 장바구니에서 상품 수량 업데이트
-    @PatchMapping("/cart-list/{cartItemId}")
+    @Transactional
+    @PostMapping("/cart-list/{cartItemId}")
     public ResponseEntity<?> updateCartItem(
             @PathVariable Long cartItemId,
             @RequestBody CartCountUpdateRequestDto cartCountUpdateRequestDto,
@@ -103,6 +106,7 @@ public class CartController {
 
 
     // 장바구니에서 상품 삭제
+    @Transactional
     @DeleteMapping("/cart-list/{cartItemId}")
     public ResponseEntity<?> deleteCartItem(@PathVariable Long cartItemId, @AuthenticationPrincipal CustomUserDetails customUserDetails){
         String email = customUserDetails.getEmail();
@@ -117,6 +121,7 @@ public class CartController {
     }
 
     // 장바구니에서 주문하기
+    @Transactional
     @PostMapping("/cart/orders")
     public ResponseEntity<?> orderCartItems(@RequestBody CartOrderDto cartOrderDto, @AuthenticationPrincipal CustomUserDetails customUserDetails){
         List<CartOrderDto> cartOrderDtoList = cartOrderDto.getCartOrderDtoList();

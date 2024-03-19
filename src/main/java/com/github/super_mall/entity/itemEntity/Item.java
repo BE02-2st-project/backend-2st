@@ -76,7 +76,7 @@ public class Item {
 
     // 주문 취소 시 상품 재고 증가 메소드
     public void addStock(Integer count) {
-        stock = stock + count;
+        this.stock = stock + count;
     }
 
     public void deleteItem() {

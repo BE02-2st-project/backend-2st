@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
@@ -57,14 +58,17 @@ public class OrderController {
     }
 
     // 주문 조회
+    @Transactional
     @GetMapping("/order-list")
     public List<OrderResponseDto> findAllOrder(@AuthenticationPrincipal CustomUserDetails customUserDetails){
         String email = customUserDetails.getEmail();
         return orderService.findAllOrder(email);
     }
 
+
     // 주문 취소
-    @PatchMapping("/order-list/{orderId}")
+    @Transactional
+    @PostMapping("/order-list/{orderId}")
     public ResponseEntity<?> deleteOrder(@PathVariable Long orderId, @AuthenticationPrincipal CustomUserDetails customUserDetails){
         String email = customUserDetails.getEmail();
 
@@ -72,7 +76,7 @@ public class OrderController {
             return new ResponseEntity<>("주문 취소 권한이 없습니다", HttpStatus.FORBIDDEN);
         }
 
-        orderService.deleteOrder(orderId);
+        orderService.cancelOrder(orderId);
 
         return new ResponseEntity<String>("주문이 취소되었습니다.", HttpStatus.OK);
     }
