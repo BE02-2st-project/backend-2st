@@ -40,14 +40,14 @@ public class ItemController {
     }
 
     @PutMapping("/updateItem")
-    public ResponseEntity<?> updateProduct(@RequestBody ItemRegisterDto item) {
-        itemService.updateProduct(item);
+    public ResponseEntity<?> updateItem(@RequestBody ItemRegisterDto item) {
+        itemService.updateItem(item);
         return ResponseEntity.ok("상품이 수정되었습니다!");
     }
 
     @DeleteMapping("/deleteItem/{itemId}")
-    public ResponseEntity<?> deleteProduct(@PathVariable Integer itemId) {
-        itemService.deleteProduct(itemId);
+    public ResponseEntity<?> deleteItem(@PathVariable Integer itemId) {
+        itemService.deleteItem(itemId);
         return ResponseEntity.ok("상품이 삭제되었습니다!");
     }
 

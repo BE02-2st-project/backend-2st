@@ -58,7 +58,7 @@ public class ItemService {
     }
 
     @Transactional
-    public void updateProduct(ItemRegisterDto itemRegisterDto) {
+    public void updateItem(ItemRegisterDto itemRegisterDto) {
         Category category = categoryRepository.findCategoryByCategory(itemRegisterDto.getCategory())
                 .orElseThrow(() -> new RuntimeException("카테고리가 존재하지 않습니다."));
 
@@ -76,7 +76,7 @@ public class ItemService {
     }
 
     @Transactional
-    public void deleteProduct(Integer itemId) {
+    public void deleteItem(Integer itemId) {
         Item itemEntity = itemRepository.findById(itemId)
                 .orElseThrow(() -> new RuntimeException("존재하지 않는 상품입니다."));
         if (itemEntity.isDelete()) throw new RuntimeException("이미 삭제된 상품입니다.");
