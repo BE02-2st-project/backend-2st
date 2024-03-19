@@ -24,13 +24,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String token = jwtTokenUtil.resolveToken(request);
-
-
+        log.info("token = {}", token);
 
         if(token != null && jwtTokenUtil.validation(token)) {
-            if(jwtTokenUtil.isExpired(token)) {
-                throw new LoginException("accessToken이 만료되었습니다.");
-            }
             Authentication auth = jwtTokenUtil.getAuthentication(token);
             SecurityContextHolder.getContext().setAuthentication(auth);
         }
