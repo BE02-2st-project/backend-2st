@@ -36,7 +36,7 @@ public class Item {
     @Column(name = "color")
     private String color;
 
-    @OneToMany(mappedBy = "item")
+    @OneToMany(mappedBy = "item", fetch = FetchType.EAGER)
     private List<ItemImage> imgURLs;
 
     @Column(name = "price")
