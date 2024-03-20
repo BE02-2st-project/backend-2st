@@ -8,4 +8,6 @@ import java.util.List;
 public interface ItemImageRepository extends JpaRepository<ItemImage, Integer> {
 
     List<ItemImage> findByItemId(Integer itemId);
+
+    ItemImage findByItem_IdAndRepImgURL(Integer itemId, String repImgURL);
 }
