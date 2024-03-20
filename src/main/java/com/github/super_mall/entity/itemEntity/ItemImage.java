@@ -2,14 +2,12 @@ package com.github.super_mall.entity.itemEntity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Table(name = "item_image")
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -27,6 +25,10 @@ public class ItemImage {
 
     @Column(name = "image_url")
     private String imageURL;
+
+    // 대표이미지 찾기
+    @Column(name = "rep_img")
+    private String repImgURL;
 
     public static ItemImage toEntity(String image, Item item) {
         return ItemImage.builder()

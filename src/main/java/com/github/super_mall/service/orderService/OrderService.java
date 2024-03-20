@@ -4,11 +4,13 @@ import com.github.super_mall.dto.orderDto.OrderItemResponseDto;
 import com.github.super_mall.dto.orderDto.OrderRequestDto;
 import com.github.super_mall.dto.orderDto.OrderResponseDto;
 import com.github.super_mall.entity.itemEntity.Item;
+import com.github.super_mall.entity.itemEntity.ItemImage;
 import com.github.super_mall.entity.orderEntity.Orders;
 import com.github.super_mall.entity.orderItemEntity.OrderItem;
 import com.github.super_mall.entity.userEntity.User;
 import com.github.super_mall.exceptions.LoginException;
 import com.github.super_mall.repository.cartRepository.CartRepository;
+import com.github.super_mall.repository.itemRepository.ItemImageRepository;
 import com.github.super_mall.repository.itemRepository.ItemRepository;
 import com.github.super_mall.repository.orderRepository.OrderRepository;
 import com.github.super_mall.repository.userRepository.UserRepository;
@@ -29,7 +31,7 @@ public class OrderService {
     private final ItemRepository itemRepository;
     private final UserRepository userRepository;
     private final OrderRepository orderRepository;
-    private final CartRepository cartRepository;
+    private final ItemImageRepository itemImageRepository;
 
     // 주문 생성
     public void createOrder(OrderRequestDto orderDto, String email) {
@@ -82,7 +84,8 @@ public class OrderService {
             OrderResponseDto orderResponseDto = new OrderResponseDto(orders);
             List<OrderItem> orderItemList = orders.getOrderItemList();
             for(OrderItem orderItem : orderItemList){
-                OrderItemResponseDto orderItemResponseDto = new OrderItemResponseDto(orderItem);
+                ItemImage itemImage = itemImageRepository.findByItem_IdAndRepImgURL(orderItem.getItem().getId(), "Y");
+                OrderItemResponseDto orderItemResponseDto = new OrderItemResponseDto(itemImage.getImageURL(), orderItem);
                 orderResponseDto.addOrderItemDto(orderItemResponseDto);
             }
 

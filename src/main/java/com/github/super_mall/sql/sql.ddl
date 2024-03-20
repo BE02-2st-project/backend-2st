@@ -16,15 +16,16 @@ CREATE TABLE `users` (
                          `deleted_at` DATETIME NULL
 );
 
-CREATE TABLE `items` (
-                         `item_id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                         `category_id` INT NOT NULL,
-                         `item_name` VARCHAR(255) NOT NULL,
-                         `img` VARCHAR(255) NOT NULL,
-                         `price` INT NOT NULL,
-                         `stock` INT NOT NULL,
-                         `item_description` TEXT NOT NULL,
-                         `create_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+create table items(
+    item_id int auto_increment primary key,
+    category_id int not null,
+    item_name varchar(255) not null,
+    color varchar(30) default 'black' not null,
+    price int not null,
+    stock int not null,
+    item_description text not null,
+    create_at datetime default CURRENT_TIMESTAMP not null,
+    is_delete tinyint(1) default 0 not null
 );
 
 CREATE TABLE `categorys` (
@@ -87,15 +88,14 @@ CREATE TABLE `refresh_tokens` (
                                   `refresh_token` VARCHAR(255) NOT NULL
 );
 
-create table item_image
-(
-    image_id  int auto_increment
-        primary key,
-    item_id   int          not null,
-    image_url varchar(255) not null
+create table item_image(
+                        image_id int auto_increment primary key,
+                        item_id int not null,
+                        image_url varchar(255) not null
 );
 
 alter table items
     add is_delete boolean default false,
     add color varchar(30) not null;
 
+git
