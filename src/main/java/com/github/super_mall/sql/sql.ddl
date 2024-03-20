@@ -94,8 +94,3 @@ create table item_image(
                         image_url varchar(255) not null
 );
 
-alter table items
-    add is_delete boolean default false,
-    add color varchar(30) not null;
-
-git
