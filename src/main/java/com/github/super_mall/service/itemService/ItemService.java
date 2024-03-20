@@ -33,9 +33,7 @@ public class ItemService {
     private final ItemImageRepository itemImageRepository;
 
     public Page<Item> findWithPaging(Pageable pageable) {
-        return itemRepository.findAll(PageRequest.of(pageable.getPageNumber(), 3));
-
-//        return itemRepository.findAll(pageable);
+        return itemRepository.findAll(pageable);
     }
 
     public List<Item> findAllItem() {
