@@ -1,6 +1,7 @@
 package com.github.super_mall.service.authService;
 
 import com.github.super_mall.dto.loginDTO.LoginDTO;
+import com.github.super_mall.dto.loginDTO.LoginResponseDto;
 import com.github.super_mall.dto.refreshTokenDto.RefreshTokenDto;
 import com.github.super_mall.dto.signupDto.SignupDTO;
 import com.github.super_mall.dto.userDto.UserDto;
@@ -71,7 +72,7 @@ public class AuthService {
         return new UserDto(saveUser);
     }
 
-    public UserDto login(LoginDTO loginDTO, HttpServletResponse response) {
+    public LoginResponseDto login(LoginDTO loginDTO, HttpServletResponse response) {
 
         Authentication auth = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginDTO.getEmail(), loginDTO.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(auth);
@@ -87,23 +88,27 @@ public class AuthService {
             throw new LoginException("비밀번호가 맞지 않슴니다.");
         }
 
-        UserDto userDto = new UserDto(findUser);
+        LoginResponseDto loginResponseDto = new LoginResponseDto(findUser);
 
         String accessToken = jwtTokenUtil.createAccessToken(findUser.getEmail());
         response.addHeader(Constants.HEADER_ACCESSTOKEN_KEY, accessToken);
-
         Optional<RefreshToken> refreshToken = refreshTokenRepository.findByUserUserId(findUser.getUserId());
+
+        loginResponseDto.setAccessToken(accessToken);
+
 
         if(refreshToken.isEmpty()) {
             String newRefreshToken = jwtTokenUtil.createRefreshToken(findUser.getEmail());
             RefreshToken newRefreshTokenEntity = RefreshToken.builder().user(findUser).refreshToken(newRefreshToken).build();
             refreshTokenRepository.save(newRefreshTokenEntity);
             response.addHeader(Constants.HEADER_REFRESHTOKEN_KEY, newRefreshToken);
+            loginResponseDto.setRefreshToken(newRefreshToken);
         } else {
             response.addHeader(Constants.HEADER_REFRESHTOKEN_KEY, refreshToken.get().getRefreshToken());
+            loginResponseDto.setRefreshToken(refreshToken.get().getRefreshToken());
         }
 
-        return userDto;
+        return loginResponseDto;
     }
 
 
