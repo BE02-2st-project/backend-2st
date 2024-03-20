@@ -12,6 +12,10 @@ import com.github.super_mall.repository.saleRepository.SaleRepository;
 import com.github.super_mall.repository.userRepository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import com.github.super_mall.entity.itemEntity.Item;
 import com.github.super_mall.entity.categoryEntity.Category;
@@ -27,6 +31,10 @@ public class ItemService {
     private final UserRepository userRepository;
     private final SaleRepository saleRepository;
     private final ItemImageRepository itemImageRepository;
+
+    public Page<Item> findWithPaging(Pageable pageable) {
+        return itemRepository.findAll(pageable);
+    }
 
     public List<Item> findAllItem() {
         return itemRepository.findAll();
