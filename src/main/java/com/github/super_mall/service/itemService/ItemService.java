@@ -12,15 +12,13 @@ import com.github.super_mall.repository.saleRepository.SaleRepository;
 import com.github.super_mall.repository.userRepository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import com.github.super_mall.entity.itemEntity.Item;
 import com.github.super_mall.entity.categoryEntity.Category;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -33,7 +31,12 @@ public class ItemService {
     private final ItemImageRepository itemImageRepository;
 
     public Page<Item> findWithPaging(Pageable pageable) {
-        return itemRepository.findAll(pageable);
+
+        Sort sort = Sort.by(Sort.Direction.DESC, "createAt");
+
+        Pageable pageableWithSort = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort);
+
+        return itemRepository.findAll(pageableWithSort);
     }
 
     public List<Item> findAllItem() {
@@ -44,6 +47,21 @@ public class ItemService {
         return itemRepository.findItemByNameContaining(nameKeyword).stream()
                 .filter(item -> !item.isDelete())
                 .collect(Collectors.toList());
+    }
+
+    public Page<Item> findByNameContainingWithPage(String nameKeyword, Pageable pageable) {
+
+        Sort sort = Sort.by(Sort.Direction.DESC, "createAt");
+
+        Pageable pageableWithSort = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort);
+        Page<Item> itemPage = itemRepository.findAllByNameContaining(nameKeyword, pageableWithSort);
+
+        List<Item> filteredItems = itemPage.getContent().stream()
+                .filter(item -> !item.isDelete())
+                .filter(item -> item.getName().contains(nameKeyword))
+                .collect(Collectors.toList());
+
+        return new PageImpl<>(filteredItems, pageable, itemPage.getTotalElements());
     }
 
     @Transactional
@@ -63,6 +81,18 @@ public class ItemService {
         addItem.getImgURLs().forEach(image -> {
             itemImageRepository.save(ItemImage.toEntity(image, item));
         });
+
+        determineMainImage(item);
+    }
+
+    private void determineMainImage(Item item) {
+        ItemImage regImg = itemImageRepository
+                .findByItemId(item.getId())
+                .stream()
+                .min(ItemImage::compareTo)
+                .orElseThrow(() -> new IllegalArgumentException("이미지가 비어 있습니다."));
+
+        regImg.setRepImgURL("Y");
     }
 
     @Transactional
