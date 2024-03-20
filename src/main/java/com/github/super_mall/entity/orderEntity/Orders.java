@@ -36,16 +36,13 @@ public class Orders {
     @Column(name = "total_price")
     private Integer totalPrice;
 
-    // 만약 배송지를 추가한다면 여기?
-
-    @DateTimeFormat(pattern = "yyyy-mm-dd hh:mm:ss")
-    @Column(name = "create_at")
-    private LocalDateTime createAt;
-
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
     private OrderStatus status;
 
+    @DateTimeFormat(pattern = "yyyy-mm-dd hh:mm:ss")
+    @Column(name = "create_at")
+    private LocalDateTime createAt;
 
     // OrderItem 생성 메소드
     public void addOrderItem(OrderItem orderItem){
