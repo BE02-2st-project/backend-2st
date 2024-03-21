@@ -22,12 +22,12 @@ public class Cart {
     @Column(name = "cart_id")
     private Long cartId;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     private User user;
 
     @Builder.Default
-    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "cart", fetch = FetchType.LAZY)
     private List<CartItem> cartItemList = new ArrayList<>();
 
     public static Cart createCart(User user){

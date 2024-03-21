@@ -23,13 +23,13 @@ public class Orders {
     @Column(name = "order_Id")
     private Long oderId;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     private User user;
 
     // 주문할 아이템의 리스트를 들고온다.
     @Builder.Default
-    @OneToMany(mappedBy = "orders", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "orders", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<OrderItem> orderItemList = new ArrayList<>();
 
     // 총 금액

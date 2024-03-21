@@ -95,3 +95,5 @@ create table item_image(
                         rep_img varchar(255)
 );
 
+alter table item_image add rep_img varchar(255);
+
