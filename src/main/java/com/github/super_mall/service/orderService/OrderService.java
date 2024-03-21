@@ -34,6 +34,7 @@ public class OrderService {
     private final ItemImageRepository itemImageRepository;
 
     // 주문 생성
+    @Transactional
     public void createOrder(OrderRequestDto orderDto, String email) {
         Item item = itemRepository.findById(orderDto.getItemId())
                 .orElseThrow(EntityNotFoundException::new);
@@ -53,6 +54,7 @@ public class OrderService {
     }
 
     // 장바구니에서 주문할 상품리스트를 받아서 주문 생성
+    @Transactional
     public void createOrders(List<OrderRequestDto> orderRequestDtoList, String email){
         User user = userRepository.findByEmail(email)
                 .orElseThrow(EntityNotFoundException::new);
@@ -75,6 +77,7 @@ public class OrderService {
     }
 
     // 주문 조회
+    @Transactional
     public List<OrderResponseDto> findAllOrder(String email) {
         List<Orders> ordersList = orderRepository.findOrders(email);
 
@@ -96,6 +99,7 @@ public class OrderService {
     }
 
     // 주문 취소
+    @Transactional
     public void cancelOrder(Long orderId) {
         Orders orders = orderRepository.findById(orderId).orElseThrow(EntityNotFoundException::new);
         orders.cancelOrder();

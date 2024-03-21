@@ -39,6 +39,7 @@ public class CartService {
     private final OrderService orderService;
 
     // 장바구니 생성 & 장바구니에 상품 추가
+    @Transactional
     public void addCart(CartItemRequestDto cartItemRequestDto, String email){
         Item item = itemRepository.findById(cartItemRequestDto.getItemId())
                 .orElseThrow(EntityNotFoundException::new);
@@ -67,6 +68,7 @@ public class CartService {
     }
 
     // 장바구니 조회
+    @Transactional
     public List<CartResponseDto> findCartList(String email){
         List<CartResponseDto> cartResponseDtoList = new ArrayList<>();
 
@@ -83,6 +85,7 @@ public class CartService {
     }
 
     // 장바구니에서 상품 수량 업데이트
+    @Transactional
     public void updateCartItemCount(Long cartItemId, Integer count){
         CartItem cartItem = cartItemRepository.findById(cartItemId)
                 .orElseThrow(EntityNotFoundException::new);
@@ -91,6 +94,7 @@ public class CartService {
     }
 
     // 장바구니에서 상품 삭제
+    @Transactional
     public void deleteCartItem(Long cartItemId){
         CartItem cartItem = cartItemRepository.findById(cartItemId)
                 .orElseThrow(EntityNotFoundException::new);
@@ -98,6 +102,7 @@ public class CartService {
     }
 
     // 장바구니에서 주문하기
+    @Transactional
     public void orderCartItems(List<CartOrderDto> cartOrderDtoList, String email) {
         List<OrderRequestDto> orderRequestDtoList = new ArrayList<>();
 
