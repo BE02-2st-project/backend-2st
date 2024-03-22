@@ -91,6 +91,7 @@ CREATE TABLE `refresh_tokens` (
 create table item_image(
                         image_id int auto_increment primary key,
                         item_id int not null,
-                        image_url varchar(255) not null
+                        image_url varchar(255) not null,
+                        rep_img varchar(255)
 );
 

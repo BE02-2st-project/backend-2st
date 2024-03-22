@@ -16,11 +16,11 @@ public class OrderItem {
     @Column(name = "order_item_id")
     private Long orderItemId;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "item_id")
     private Item item;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "order_id")
     private Orders orders;
 
