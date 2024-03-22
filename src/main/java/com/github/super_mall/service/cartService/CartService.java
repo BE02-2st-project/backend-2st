@@ -10,6 +10,7 @@ import com.github.super_mall.entity.cartItemEntity.CartItem;
 import com.github.super_mall.entity.itemEntity.Item;
 import com.github.super_mall.entity.userEntity.User;
 import com.github.super_mall.exceptions.LoginException;
+import com.github.super_mall.exceptions.OutOfStockException;
 import com.github.super_mall.repository.cartItemRepository.CartItemRepository;
 import com.github.super_mall.repository.cartRepository.CartRepository;
 import com.github.super_mall.repository.itemRepository.ItemRepository;
@@ -110,16 +111,23 @@ public class CartService {
         for (CartOrderDto cartOrderDto : cartOrderDtoList){
             CartItem cartItem = cartItemRepository.findById(cartOrderDto.getCartItemId())
                     .orElseThrow(EntityNotFoundException::new);
+            Integer stock = cartItem.getItem().getStock();
 
-            OrderRequestDto orderRequestDto = new OrderRequestDto();
-            orderRequestDto.setItemId(cartItem.getItem().getId());
-            orderRequestDto.setCount(cartItem.getCount());
-            orderRequestDtoList.add(orderRequestDto);
+            if (stock < cartItem.getCount()){
+                throw new OutOfStockException("상품의 재고가 부족합니다. (현재 재고: " + stock + ")");
+            } else {
+                OrderRequestDto orderRequestDto = new OrderRequestDto();
+                orderRequestDto.setItemId(cartItem.getItem().getId());
+                orderRequestDto.setCount(cartItem.getCount());
+                orderRequestDtoList.add(orderRequestDto);
+            }
         }
 
         // 주문했다면 장바구니에서 상품 제거
         orderService.createOrders(orderRequestDtoList, email);
         for (CartOrderDto cartOrderDto : cartOrderDtoList){
+
+
             CartItem cartItem = cartItemRepository.findById(cartOrderDto.getCartItemId())
                     .orElseThrow(EntityNotFoundException::new);
 
