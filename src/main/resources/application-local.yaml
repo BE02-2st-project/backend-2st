@@ -16,3 +16,13 @@ spring:
     import:
       - application-oauth.yaml
 
+# SSL setting
+
+server:
+  port: 443
+  ssl:
+    enabled: true
+    key-store: bootsecurity.p12
+    key-store-password: ${KEY_PASSWORD}
+    key-store-type: PKCS12
+    key-alias: bootsecurity
