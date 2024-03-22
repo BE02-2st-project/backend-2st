@@ -59,8 +59,8 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         }
 
         UriComponents uriComponents = UriComponentsBuilder.newInstance()
-                        .scheme("https")
-                        .host("frontend-supermall.vercel.app")
+                        .scheme("http")
+                        .host("localhost:8080")
                         .query("accessToken={value1}")
                         .query("refreshToken={value2}")
                                 .buildAndExpand(accessToken, refreshToken);
