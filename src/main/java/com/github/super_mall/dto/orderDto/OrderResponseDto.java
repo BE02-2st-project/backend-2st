@@ -16,6 +16,7 @@ public class OrderResponseDto {
     private LocalDateTime orderDate;
     private OrderStatus orderStatus;
     private List<OrderItemResponseDto> orderItemResponseDtoList = new ArrayList<>();
+    private Integer orderTotalPrice;
 
     // 주문 상품 리스트
     public void addOrderItemDto(OrderItemResponseDto orderItemResponseDto){
@@ -26,5 +27,6 @@ public class OrderResponseDto {
         this.orderId = orders.getOderId();
         this.orderDate = orders.getCreateAt();
         this.orderStatus = orders.getStatus();
+        this.orderTotalPrice = orders.getTotalPrice();
     }
 }
