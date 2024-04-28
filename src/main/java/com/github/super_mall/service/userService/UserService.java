@@ -21,8 +21,6 @@ public class UserService {
                () -> new LoginException("유저가 없습니다")
        );
 
-       log.info("gender = {}", userDto);
-
        User updateUser = user.updateUser(userDto);
        User findNewUser = userRepository.save(updateUser);
 

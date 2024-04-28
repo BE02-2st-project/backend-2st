@@ -66,6 +66,5 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
                                 .buildAndExpand(accessToken, refreshToken);
 
         response.sendRedirect(String.valueOf(uriComponents));
-
     }
 }

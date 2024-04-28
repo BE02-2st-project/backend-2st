@@ -20,6 +20,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -29,6 +30,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.security.Principal;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
@@ -48,6 +50,7 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final JwtTokenUtil jwtTokenUtil;
+    private final RedisTemplate<String, String> redisTemplate;
 
     @Transactional
     public UserDto signup(SignupDTO signupDTO) {
@@ -94,14 +97,18 @@ public class AuthService {
         response.addHeader(Constants.HEADER_ACCESSTOKEN_KEY, accessToken);
         Optional<RefreshToken> refreshToken = refreshTokenRepository.findByUserUserId(findUser.getUserId());
 
+
+
         loginResponseDto.setAccessToken(accessToken);
 
 
         if(refreshToken.isEmpty()) {
             String newRefreshToken = jwtTokenUtil.createRefreshToken(findUser.getEmail());
             RefreshToken newRefreshTokenEntity = RefreshToken.builder().user(findUser).refreshToken(newRefreshToken).build();
-            refreshTokenRepository.save(newRefreshTokenEntity);
+            RefreshToken dbRefreshToken = refreshTokenRepository.save(newRefreshTokenEntity);
             response.addHeader(Constants.HEADER_REFRESHTOKEN_KEY, newRefreshToken);
+
+            redisTemplate.opsForValue().set("RF: " + findUser.getUserId(), newRefreshToken, Duration.ofHours(3L));
             loginResponseDto.setRefreshToken(newRefreshToken);
         } else {
             response.addHeader(Constants.HEADER_REFRESHTOKEN_KEY, refreshToken.get().getRefreshToken());
@@ -113,14 +120,27 @@ public class AuthService {
 
 
     public String refresh(RefreshTokenDto refreshTokenDto, HttpServletResponse response) {
-        if( refreshTokenDto.getRefreshToken() == null) {
+
+        if(refreshTokenDto.getRefreshToken() == null) {
             throw new LoginException("refreshToken이 없습니다.");
         }
+
 
 
         User user = userRepository.findByEmail(refreshTokenDto.getEmail()).orElseThrow(
                 () -> new LoginException("회원을 찾을 수 없습니다")
            );
+
+        if(redisTemplate.opsForValue().get("RF: " + user.getUserId()) != null) {
+            String refreshToken = redisTemplate.opsForValue().get("RF: " + user.getUserId())
+
+
+            if (!refreshToken.equals(refreshTokenDto.getRefreshToken())) {
+                throw new LoginException("accessToken을 발급 할 수 없습니다.");
+            }
+
+            return "accessToken이 발급 되었습니다.";
+        }
 
         RefreshToken refreshToken = refreshTokenRepository.findByUserUserId(user.getUserId()).orElseThrow(
                 () -> new LoginException("refresh Token을 찾을 수 없습니다")
